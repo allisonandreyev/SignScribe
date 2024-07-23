@@ -1,6 +1,7 @@
 # CPSE-2024
 ## Robotic Hand: SignScribe
-##### Mechanical bionic hand which can process human voice and output equivalent movements in sign language.
+### Mechanical bionic hand which can process human voice and output equivalent movements in sign language.
+#### Creators: Allison Andreyev, Yenni Do, Sakib Niaz, Elliott Owens
 ---
 *Dependencies*
 * Uses NLM VOSK to be translate speech into text format
