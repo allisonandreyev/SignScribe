@@ -1,27 +1,29 @@
-0:
+*About*: We tested the accuracy of four VOSK models (open source) by saying several tounge twisters and checking the accuracy of the ouput.
+
+WHAT WE SAID: 
 
 sally sold seashells by the sea shore
 peter piper picked up a pepper
 how much wood would a wood chuck chuck if a wood chuck could chuck wood
 
-1a:
+MODEL 1:
 
 sally sold seashells by the sea shore
 peter piper picked up a pepper
 how much would would a would chuck chuck if a woodchuck could chuck wood
 
-2:
+MODEL 2:
 
 sally sold seashells by the seashore
 peter piper picked up a pepper 
 how much wood wood a woodchuck chuck if a woodchuck could chuck would
 
-3:
+MODEL 3:
 
 sally sold seashells by the seashore
 peter piper picked up a pepper
 how much would would a woodchuck chuck if a woodchuck could chuck wood
 
-4:
+MODEL 4:
 
-Failed
+Failed (too large)
