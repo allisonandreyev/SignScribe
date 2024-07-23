@@ -29,8 +29,9 @@ SOFTWARE.
 * Raspberry Pi Model 4B controls ~7 servos
 * Python program (open source for other's implementation)
 * Bionic hand for sign movements
+* PyAudio library
 
-**Usages**
+*Usages*
 * Intended for those learning sign language
 * Public speaking, in need of transcription
 
