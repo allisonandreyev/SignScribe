@@ -14,4 +14,4 @@
 * Public speaking, in need of transcription
 
 **Reporting a Problem**
-Contact us at __signscribe.official@gmail.com__ if you have a problem.
+#####Contact us at __signscribe.official@gmail.com__ if you have a problem.
