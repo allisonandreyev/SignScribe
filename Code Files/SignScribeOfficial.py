@@ -11,6 +11,7 @@ RPi.GPIO.setup(37, RPi.GPIO.OUT)
 Servo1PWM = RPi.GPIO.PWM(37, 50)
 Servo1PWM.start(0)
 wordBacklog = []
+
 file1 = 'CrossCommunication.txt'
 
 print("What model would you like?\n")
@@ -31,13 +32,13 @@ else:
 	path=r'/home/sarlauyen/Desktop/VOSK Test Stuff/VOSK Modules/vosk-model-small-en-us-0.15'
 
 def ServoMove():
-	InputAngle = 90
+	InputAngle = 180
 	while True:
 		sleep(2)
-		if InputAngle == 90:
+		if InputAngle == 180:
 			InputAngle = 0
 		else:
-			InputAngle = 90
+			InputAngle = 180
 		ServoDuty = InputAngle / 18 + 2.5
 		RPi.GPIO.output(37, True)
 		Servo1PWM.ChangeDutyCycle(ServoDuty)
@@ -72,7 +73,7 @@ def VoiceToText():
 			with open(file1, 'a') as f:
 				f.write(str(wordBacklog) + '\n')
 		
-			if "exit" in text.lower():
+			if "stop sign scribe" in text.lower():
 				print("Exiting...\n")
 				#call other file to move hand
 				print("File with speech transcription will now be cleared for the next session.")
@@ -88,7 +89,101 @@ def VoiceToText():
 	stream.stop_stream()
 	stream.close()
 
-ServoThread = thread.Thread(target=ServoMove)
+
+def letterSwitch():
+	sleep(2)
+	stop = ["stop","sign", "scribe"]
+	while True:
+		sleep(0.05)
+		if not wordBacklog == [] and not set(stop).issubset(set(wordBacklog)):
+			for letter in wordBacklog[0]: 
+				#disect first word into letters
+				match letter:
+					case 'a':
+						#smth
+						print("a")
+					case 'b':
+						#smth
+						print("b")
+					case 'c':
+						print("c")
+					case 'd':
+						print("d")
+					case 'e':
+						#smth
+						print("e")
+					case 'f':
+						#smth
+						print("f")
+					case 'g':
+						#smth
+						print("g")
+					case 'h':
+						#smth
+						print("h")
+					case 'i':
+						#smth
+						print("i")
+					case 'j':
+						#smth
+						print("j")
+					case 'k':
+						#smth
+						print("k")
+					case 'l':
+						#smth
+						print("l")
+					case 'm':
+						#smth
+						print("m")
+					case 'n':
+						#smth
+						print("n")
+					case 'o':
+						#smth
+						print("o")
+					case 'p':
+						#smth
+						print("p")
+					case 'q':
+						#smth
+						print("q")
+					case 'r':
+						#smth
+						print("r")
+					case 's':
+						#smth
+						print("s")
+					case 't':
+						#smth
+						print("t")
+					case 'u':
+						#smth
+						print("u")
+					case 'v':
+						#smth
+						print("v")
+					case 'w':
+						#smth
+						print("w")
+					case 'x':
+						#smth
+						print("x")
+					case 'y':
+						#smth
+						print("y")
+					case 'z':
+						#smth
+						print("z")
+					case _:
+						#smth
+						print("'")
+			print(" ")
+				
+			#deprecate the same first workword here
+			wordBacklog.remove(wordBacklog[0])
+	
+ServoThread = thread.Thread(target=letterSwitch)
 VoiceThread = thread.Thread(target=VoiceToText)
 
 ServoThread.start()
