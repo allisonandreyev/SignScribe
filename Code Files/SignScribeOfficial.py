@@ -20,16 +20,12 @@ print("2. Small")
 print("3. Medium")
 userChoice = int(input("Selection (1-3) : "))
 
-if userChoice == 1:
-	path=r'/home/sarlauyen/Desktop/VOSK Test Stuff/VOSK Modules/vosk-model-small-en-us-0.15'
-elif userChoice == 2:
-	path=r'/home/sarlauyen/Desktop/VOSK Test Stuff/VOSK Modules/vosk-model-en-us-0.22-lgraph'
+if userChoice == 2:
+	path=r'/home/signscribe/Downloads/SignScribe-master/Organization/VoskModels/vosk-model-en-us-0.22-lgraph'
 elif userChoice == 3:
-	path=r'/home/sarlauyen/Desktop/VOSK Test Stuff/VOSK Modules/vosk-model-en-us-0.22'
+	path=r'/home/signscribe/Downloads/SignScribe-master/Organization/VoskModels/vosk-model-en-us-0.22'
 else:
-	print("GIGA IS GONE!!!")
-	sleep(10)
-	path=r'/home/sarlauyen/Desktop/VOSK Test Stuff/VOSK Modules/vosk-model-small-en-us-0.15'
+	path=r'/home/signscribe/Downloads/SignScribe-master/Organization/VoskModels/vosk-model-small-en-us-0.15'
 
 def ServoMove():
 	InputAngle = 180
@@ -68,7 +64,9 @@ def VoiceToText():
 			newText = text.split()
 			for i in newText:
 				wordBacklog.append(i)
-			print(str(wordBacklog))
+			
+			if not wordBacklog == []:
+				print(str(wordBacklog))
 			
 			with open(file1, 'a') as f:
 				f.write(str(wordBacklog) + '\n')
