@@ -4,14 +4,15 @@ import pyaudio
 import json
 import thread
 import RPi.GPIO
+import parserConfig
+from HandControl import controlServo
 
-RPi.GPIO.setwarnings(False)
-RPi.GPIO.setmode(RPi.GPIO.BOARD)
-RPi.GPIO.setup(37, RPi.GPIO.OUT)
-Servo1PWM = RPi.GPIO.PWM(37, 50)
-Servo1PWM.start(0)
+exitWord, wordsPause, lettersPause, autoSave = parserConfig.configParser()
+
 wordBacklog = []
+fullTranscript = []
 
+file2 = 'newfilename.txt'
 file1 = 'CrossCommunication.txt'
 
 print("What model would you like?\n")
@@ -26,21 +27,6 @@ elif userChoice == 3:
 	path=r'/home/signscribe/Downloads/SignScribe-master/Organization/VoskModels/vosk-model-en-us-0.22'
 else:
 	path=r'/home/signscribe/Downloads/SignScribe-master/Organization/VoskModels/vosk-model-small-en-us-0.15'
-
-def ServoMove():
-	InputAngle = 180
-	while True:
-		sleep(2)
-		if InputAngle == 180:
-			InputAngle = 0
-		else:
-			InputAngle = 180
-		ServoDuty = InputAngle / 18 + 2.5
-		RPi.GPIO.output(37, True)
-		Servo1PWM.ChangeDutyCycle(ServoDuty)
-		sleep(1)
-		RPi.GPIO.output(37, False)
-		Servo1PWM.ChangeDutyCycle(0)
 
 def VoiceToText():
 	recognizer = KaldiRecognizer(Model(path), 16000)
@@ -64,6 +50,7 @@ def VoiceToText():
 			newText = text.split()
 			for i in newText:
 				wordBacklog.append(i)
+				fullTranscript.append(i)
 			
 			if not wordBacklog == []:
 				print(str(wordBacklog))
@@ -71,116 +58,133 @@ def VoiceToText():
 			with open(file1, 'a') as f:
 				f.write(str(wordBacklog) + '\n')
 		
-			if "stop sign scribe" in text.lower():
+			if exitWord in text.lower():
 				print("Exiting...\n")
-				#call other file to move hand
-				print("File with speech transcription will now be cleared for the next session.")
-				print("Enter '1' if you have transfered the contents of the file and/or want it to be cleared: ")
-				choice = int(input())
-				if choice == 1:
-					with open(file1, 'w') as file:
-						pass
-				print("File contents of '" + file1 + "' have been cleared.")
-				break
+				print("AUTOSAVE IS: ",autoSave)
+				if autoSave == True:
+					with open(file2, 'a') as f2:
+						f2.write(str(fullTranscript) + '\n')
+					print("Contents of text transcript have been automatically saved to ", file2)
+					
 				
-	# use 'pass' to be able to clear file after other program ran
-	stream.stop_stream()
-	stream.close()
+				# use 'pass' to be able to clear file after other program ran
+				stream.stop_stream()
+				stream.close()
+				exit
 
 
 def letterSwitch():
 	sleep(2)
-	stop = ["stop","sign", "scribe"]
+	stop = exitWord.split();
 	while True:
-		sleep(0.05)
+		sleep(wordsPause)
 		if not wordBacklog == [] and not set(stop).issubset(set(wordBacklog)):
 			for letter in wordBacklog[0]: 
+				sleep(lettersPause)
 				#disect first word into letters
 				match letter:
 					case 'a':
-						#smth
+						controlServo(80, 160, 160, 160, 160)
 						print("a")
 					case 'b':
-						#smth
+						controlServo(0, 0, 0, 0, 0)
 						print("b")
 					case 'c':
+						controlServo(80, 80, 80, 80, 80)
 						print("c")
 					case 'd':
+						controlServo(0, 160, 160, 160, 0)
 						print("d")
 					case 'e':
-						#smth
+						controlServo(0, 160, 160, 160, 160)
 						print("e")
 					case 'f':
-						#smth
+						controlServo(0, 160, 0, 0, 0)
 						print("f")
 					case 'g':
-						#smth
+						controlServo(80, 0, 160, 160, 160)
 						print("g")
 					case 'h':
-						#smth
+						controlServo(40, 160, 160, 160, 160)
 						print("h")
 					case 'i':
-						#smth
+						controlServo(0, 160, 160, 160, 0)
 						print("i")
 					case 'j':
-						#smth
+						controlServo(0, 160, 160, 160, 0)
+						sleep(lettersPause)
+						controlServo(0, 160, 160, 160, 160)
+						sleep(lettersPause)
+						controlServo(0, 160, 160, 160, 0)
 						print("j")
 					case 'k':
-						#smth
+						controlServo(160, 0, 0, 160, 160)
 						print("k")
 					case 'l':
-						#smth
+						controlServo(160, 0, 160, 160, 160)
 						print("l")
 					case 'm':
-						#smth
+						controlServo(0, 80, 80, 80, 160)
 						print("m")
 					case 'n':
-						#smth
+						controlServo(0, 80, 80, 160, 160)
 						print("n")
 					case 'o':
-						#smth
+						controlServo(0, 160, 160, 160, 160)
 						print("o")
 					case 'p':
-						#smth
+						controlServo(80, 0, 100, 160, 160)
 						print("p")
 					case 'q':
-						#smth
+						controlServo(80, 80, 160, 160, 160)
 						print("q")
 					case 'r':
-						#smth
+						controlServo(0, 40, 40, 160, 160)
 						print("r")
 					case 's':
-						#smth
+						controlServo(0, 160, 160, 160, 160)
+						sleep(lettersPause)
+						controlServo(160, 160, 160, 160, 160)
+						sleep(lettersPause)
+						controlServo(0, 160, 160, 160, 160)
 						print("s")
 					case 't':
-						#smth
+						controlServo(0, 80, 60, 160, 160)
 						print("t")
 					case 'u':
-						#smth
+						controlServo(60, 0, 0, 160, 160)
 						print("u")
 					case 'v':
-						#smth
+						controlServo(0, 0, 0, 160, 160)
+						sleep(lettersPause)
+						controlServo(0, 160, 160, 160, 160)
+						sleep(lettersPause)
+						controlServo(0, 0, 0, 160, 160)
 						print("v")
 					case 'w':
-						#smth
+						controlServo(0, 0, 0, 0, 160)
 						print("w")
 					case 'x':
-						#smth
+						controlServo(0, 40, 160, 160, 160)
 						print("x")
 					case 'y':
-						#smth
+						controlServo(160, 160, 160, 160, 0)
 						print("y")
 					case 'z':
-						#smth
+						controlServo(0, 0, 160, 160, 160)
 						print("z")
 					case _:
-						#smth
 						print("'")
 			print(" ")
+			controlServo(160, 0, 0, 0, 0)
+			sleep(lettersPause)
 				
 			#deprecate the same first workword here
 			wordBacklog.remove(wordBacklog[0])
-	
+
+sleep(2)
+controlServo(160, 0, 0, 0, 0)
+sleep(4)
 ServoThread = thread.Thread(target=letterSwitch)
 VoiceThread = thread.Thread(target=VoiceToText)
 
