@@ -1,0 +1,5 @@
+['just', 'auto', 'save', 'so', 'this', 'is', 'supposed', 'to', 'save', 'to', 'a', 'file', 'and', 'i', 'specified', 'the', 'name', 'stop', 'sign', 'scriber']
+['now', 'he', 'can', 'filter', 'bad', "it's", 'more', 'elevated', "it's", 'more', 'in', 'implementing', 'we', 'had', 'to', 'put', 'it', 'every', 'single', 'book', 'what', 'if', "we'd", 'like', 'find', 'a', 'database', 'full', 'of', 'bad', 'cricket', 'stop', 'sign', 'scribe', 'look', 'up', 'really', 'quickly', 'to', 'see', 'if', "there's", 'like', 'and', 'oh', 'yeah', 'they', 'do', 'have', 'that', 'loser']
+['event', 'hobbies', 'yeah', 'okay', 'so', 'now', 'when', 'i', 'say', 'stop', 'sign', 'scribe']
+['okay', 'so', "let's", 'see', 'if', 'it', 'works', 'stop', 'sign', 'scriber', 'iran']
+['really', 'the', 'cake', 'and', 'maybe', 'not', 'yeah', "that's", 'a', 'better', 'way', 'to', 'go', 'stop', 'sign', 'scriber']
