@@ -6,17 +6,17 @@
 # BETA: servoSpeed = 'N/A'
 #PGfilter = "False"
 
-[text conversion]
+[Text Conversion]
 # What word the program will exit on (phrases work too):
 exitWord = "stop sign scribe"
 
-[servo control]
+[Servo Control]
 # Pause amount between words (seconds):
 wordsPause = "0"
 
 # Pause amount between letters (seconds):
 lettersPause = "0.4"
 
-[save]
+[Saving]
 # Auto-save setting:
 autoSave = "False"
