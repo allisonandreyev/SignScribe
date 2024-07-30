@@ -4,7 +4,7 @@
 
 [To Be Added Soon]
 # BETA: servoSpeed = 'N/A'
-#PGfilter = "False"
+#Words to Censor: ""
 
 [Text Conversion]
 # What word the program will exit on (phrases work too):
