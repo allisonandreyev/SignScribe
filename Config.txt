@@ -1,0 +1,25 @@
+# SIGNSCRIBE 2024™ CONFIG FILE
+# Enter a 'True' or 'False', or the appropriate value under the variable.
+# VALUES MUST BE IN SINGLE QUOTES
+
+[To Be Added Soon]
+# BETA: servoSpeed = 'N/A'
+
+[text conversion]
+# What word the program will exit on (phrases work too):
+exitWord = "stop sign scribe"
+
+[servo control]
+# Pause amount between words (seconds):
+wordsPause = "0"
+
+# Pause amount between letters (seconds):
+lettersPause = "0.4"
+
+[save]
+# Auto-save setting:
+autoSave = "False"
+
+[filter]
+# Words must be separated by space and not comma
+Words to censor = "fuck shit dick pussy asshole ass motherfucker bitch cum fucker"
