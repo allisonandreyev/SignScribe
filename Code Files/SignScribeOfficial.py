@@ -8,7 +8,7 @@ import parserConfig
 from HandControl import controlServo
 
 #grabs info from config file
-exitWord, wordsPause, lettersPause, autoSave = parserConfig.configParser()
+exitWord, wordsPause, lettersPause, autoSave, filter = parserConfig.configParser()
 
 wordBacklog = []
 fullTranscript = []
@@ -43,8 +43,12 @@ def VoiceToText():
 			text = result_dict.get("text","")
 			newText = text.split()
 			for i in newText:
-				wordBacklog.append(i)
-				fullTranscript.append(i)
+				if i not in filter:
+					wordBacklog.append(i)
+					fullTranscript.append(i)
+				else:
+					wordBacklog.append("[censored]")
+					fullTranscript.append("[censored]")
 
 			#outputs word backlog (for debugging purposes)
 			if not wordBacklog == []:
@@ -79,7 +83,7 @@ def letterSwitch():
 		sleep(wordsPause)
 
 		#checks if the exit word has been spoken, if it has the hand will not sign it
-		if not wordBacklog == [] and not set(stop).issubset(set(wordBacklog)):
+		if not wordBacklog == [] and not set(stop).issubset(set(wordBacklog)) and wordBacklog[0] is not "[censored]":
 			for letter in wordBacklog[0]: 
 				sleep(lettersPause)
 				
