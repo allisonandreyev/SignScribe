@@ -7,26 +7,17 @@ import RPi.GPIO
 import parserConfig
 from HandControl import controlServo
 
+#grabs info from config file
 exitWord, wordsPause, lettersPause, autoSave = parserConfig.configParser()
 
 wordBacklog = []
 fullTranscript = []
 
-file2 = 'newfilename.txt'
+file2 = 'fullTranscript.txt'
 file1 = 'CrossCommunication.txt'
 
-print("What model would you like?\n")
-print("1. Super small")
-print("2. Small")
-print("3. Medium")
-userChoice = int(input("Selection (1-3) : "))
-
-if userChoice == 2:
-	path=r'/home/signscribe/Downloads/SignScribe-master/Organization/VoskModels/vosk-model-en-us-0.22-lgraph'
-elif userChoice == 3:
-	path=r'/home/signscribe/Downloads/SignScribe-master/Organization/VoskModels/vosk-model-en-us-0.22'
-else:
-	path=r'/home/signscribe/Downloads/SignScribe-master/Organization/VoskModels/vosk-model-small-en-us-0.15'
+#vosk model
+path=r'/home/signscribe/Downloads/SignScribe-master/Organization/VoskModels/vosk-model-small-en-us-0.15'
 
 def VoiceToText():
 	recognizer = KaldiRecognizer(Model(path), 16000)
@@ -36,13 +27,16 @@ def VoiceToText():
 	stream.start_stream()
 	
 	print("Say exit when you want to terminate the program... \n")
-	
+
+	#reads data
 	while True:
 		data = stream.read(16000)
-		
+
+		#clears cross communication file from previous use
 		with open(file1, 'w') as file:
 			pass
-	
+
+		#appends data to full transcript & word backlog
 		if recognizer.AcceptWaveform(data) == True:
 			result = recognizer.Result()
 			result_dict = json.loads(result)
@@ -51,13 +45,15 @@ def VoiceToText():
 			for i in newText:
 				wordBacklog.append(i)
 				fullTranscript.append(i)
-			
+
+			#outputs word backlog (for debugging purposes)
 			if not wordBacklog == []:
 				print(str(wordBacklog))
-			
+			#appends cross communication.txt
 			with open(file1, 'a') as f:
 				f.write(str(wordBacklog) + '\n')
-		
+
+			#quits program if exit word has been stated & if autosave is True, appends full transcript to a file
 			if exitWord in text.lower():
 				print("Exiting...\n")
 				print("AUTOSAVE IS: ",autoSave)
@@ -67,7 +63,7 @@ def VoiceToText():
 					print("Contents of text transcript have been automatically saved to ", file2)
 					
 				
-				# use 'pass' to be able to clear file after other program ran
+				# stops data collection
 				stream.stop_stream()
 				stream.close()
 				exit
@@ -75,116 +71,97 @@ def VoiceToText():
 
 def letterSwitch():
 	sleep(2)
+	
 	stop = exitWord.split();
+	
 	while True:
+		
 		sleep(wordsPause)
+
+		#checks if the exit word has been spoken, if it has the hand will not sign it
 		if not wordBacklog == [] and not set(stop).issubset(set(wordBacklog)):
 			for letter in wordBacklog[0]: 
 				sleep(lettersPause)
-				#disect first word into letters
+				
+				#disect word back log into letters & run appropriate function
 				match letter:
 					case 'a':
 						controlServo(80, 160, 160, 160, 160)
-						print("a")
 					case 'b':
-						controlServo(0, 0, 0, 0, 0)
-						print("b")
+						controlServo(10,10,10,10,10)
 					case 'c':
 						controlServo(80, 80, 80, 80, 80)
-						print("c")
 					case 'd':
-						controlServo(0, 160, 160, 160, 0)
-						print("d")
+						controlServo(10, 160, 160, 160, 10)
 					case 'e':
-						controlServo(0, 160, 160, 160, 160)
-						print("e")
+						controlServo(10, 160, 160, 160, 160)
 					case 'f':
-						controlServo(0, 160, 0, 0, 0)
-						print("f")
+						controlServo(10, 160, 10, 10, 10)
 					case 'g':
-						controlServo(80, 0, 160, 160, 160)
-						print("g")
+						controlServo(80, 10, 160, 160, 160)
 					case 'h':
 						controlServo(40, 160, 160, 160, 160)
-						print("h")
 					case 'i':
-						controlServo(0, 160, 160, 160, 0)
-						print("i")
+						controlServo(10, 160, 160, 160, 10)
 					case 'j':
-						controlServo(0, 160, 160, 160, 0)
+						controlServo(10, 160, 160, 160, 10)
 						sleep(lettersPause)
-						controlServo(0, 160, 160, 160, 160)
+						controlServo(10, 160, 160, 160, 160)
 						sleep(lettersPause)
-						controlServo(0, 160, 160, 160, 0)
-						print("j")
+						controlServo(10, 160, 160, 160, 10)
 					case 'k':
-						controlServo(160, 0, 0, 160, 160)
-						print("k")
+						controlServo(160, 10, 10, 160, 160)
 					case 'l':
-						controlServo(160, 0, 160, 160, 160)
-						print("l")
+						controlServo(160, 10, 160, 160, 160)
 					case 'm':
-						controlServo(0, 80, 80, 80, 160)
-						print("m")
+						controlServo(10, 80, 80, 80, 160)
 					case 'n':
-						controlServo(0, 80, 80, 160, 160)
-						print("n")
+						controlServo(10, 80, 80, 160, 160)
 					case 'o':
-						controlServo(0, 160, 160, 160, 160)
-						print("o")
+						controlServo(10, 160, 160, 160, 160)
 					case 'p':
-						controlServo(80, 0, 100, 160, 160)
-						print("p")
+						controlServo(80, 10, 100, 160, 160)
 					case 'q':
 						controlServo(80, 80, 160, 160, 160)
-						print("q")
 					case 'r':
-						controlServo(0, 40, 40, 160, 160)
-						print("r")
+						controlServo(10, 40, 40, 160, 160)
 					case 's':
-						controlServo(0, 160, 160, 160, 160)
+						controlServo(10, 160, 160, 160, 160)
 						sleep(lettersPause)
 						controlServo(160, 160, 160, 160, 160)
 						sleep(lettersPause)
-						controlServo(0, 160, 160, 160, 160)
-						print("s")
+						controlServo(10, 160, 160, 160, 160)
 					case 't':
-						controlServo(0, 80, 60, 160, 160)
-						print("t")
+						controlServo(10, 80, 60, 160, 160)
 					case 'u':
-						controlServo(60, 0, 0, 160, 160)
-						print("u")
+						controlServo(60, 10, 10, 160, 160)
 					case 'v':
-						controlServo(0, 0, 0, 160, 160)
+						controlServo(10, 10, 10, 160, 160)
 						sleep(lettersPause)
-						controlServo(0, 160, 160, 160, 160)
+						controlServo(10, 160, 160, 160, 160)
 						sleep(lettersPause)
-						controlServo(0, 0, 0, 160, 160)
-						print("v")
+						controlServo(10, 10, 10, 160, 160)
 					case 'w':
-						controlServo(0, 0, 0, 0, 160)
-						print("w")
+						controlServo(10, 10, 10, 10, 160)
 					case 'x':
-						controlServo(0, 40, 160, 160, 160)
-						print("x")
+						controlServo(10, 40, 160, 160, 160)
 					case 'y':
-						controlServo(160, 160, 160, 160, 0)
-						print("y")
+						controlServo(160, 160, 160, 160, 10)
 					case 'z':
-						controlServo(0, 0, 160, 160, 160)
-						print("z")
-					case _:
-						print("'")
+						controlServo(10, 10, 160, 160, 160)
 			print(" ")
-			controlServo(160, 0, 0, 0, 0)
+			controlServo(160, 10, 10, 10, 10)
 			sleep(lettersPause)
 				
-			#deprecate the same first workword here
+			#update wordbacklog to remove what the hand already signed
 			wordBacklog.remove(wordBacklog[0])
 
+#reset to default position
 sleep(2)
-controlServo(160, 0, 0, 0, 0)
+controlServo(160, 10, 10, 10, 10)
 sleep(4)
+
+#initiate and run threading (multiprocessing)
 ServoThread = thread.Thread(target=letterSwitch)
 VoiceThread = thread.Thread(target=VoiceToText)
 
