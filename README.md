@@ -16,3 +16,4 @@
 
 **Reporting a Problem**
 * Contact us at __signscribe.official@gmail.com__ if you have a problem.
+* Feedback form: *__https://forms.gle/v9CXgiptrMdbxH1Q6__*
