@@ -1,4 +1,0 @@
-[Desktop Entry]
-Type=Application
-Name=SignScribeOfficial
-Exec=/usr/bin/python3 /home/signscribe/Downloads/SignScribe-master/"Code Files"/SignScribeOfficial.py
