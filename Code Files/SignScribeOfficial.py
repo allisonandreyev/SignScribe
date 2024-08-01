@@ -146,112 +146,112 @@ def letterSwitch():
 				#disect word back log into letters & run appropriate function
 				match letter:
 					case 'a':
-						controlServo(100, 160, 160, 160, 160)
+						controlServo(serv1 = 100, serv2 = 160, serv3 = 160, serv4 = 160, serv5 = 160)
 						GUI_hand_queue.put('a')
 					case 'b':
-						controlServo(10,10,10,10,10)
+						controlServo(serv1 = 10, serv2 = 10, serv3 = 10, serv4 = 10, serv5 = 10)
 						GUI_hand_queue.put('b')
 					case 'c':
-						controlServo(80, 80, 80, 80, 80)
+						controlServo(serv1 = 80, serv2 = 80, serv3 = 80, serv4 = 80, serv5 = 80)
 						GUI_hand_queue.put('c')
 					case 'd':
-						controlServo(10, 10, 160, 160, 160)
+						controlServo(serv1 = 10, serv2 = 10, serv3 = 160, serv4 = 160, serv5 = 160)
 						GUI_hand_queue.put('d')
 					case 'e':
-						controlServo(10, 160, 160, 160, 160)
+						controlServo(serv1 = 10, serv2 = 160, serv3 = 160, serv4 = 160, serv5 = 160)
 						GUI_hand_queue.put('e')
 					case 'f':
-						controlServo(10, 160, 10, 10, 10)
+						controlServo(serv1 = 10, serv2 = 160, serv3 = 10, serv4 = 10, serv5 = 10)
 						GUI_hand_queue.put('f')
 					case 'g':
-						controlServo(80, 10, 160, 160, 160)
+						controlServo(serv1 = 80, serv2 = 10, serv3 = 160, serv4 = 160, serv5 = 160)
 						GUI_hand_queue.put('g')
 					case 'h':
-						controlServo(10, 10, 10, 160, 160)
+						controlServo(serv1 = 10, serv2 = 10, serv3 = 10, serv4 = 160, serv5 = 160)
 						GUI_hand_queue.put('h')
 					case 'i':
-						controlServo(10, 160, 160, 160, 10)
+						controlServo(serv1 = 10, serv2 = 160, serv3 = 160, serv4 = 160, serv5 = 10)
 						GUI_hand_queue.put('i')
 					case 'j':
-						controlServo(10, 160, 160, 160, 10)
+						controlServo(serv1 = 10, serv2 = 160, serv3 = 160, serv4 = 160, serv5 = 10)
 						sleep(lettersPause)
-						controlServo(10, 160, 160, 160, 160)
+						controlServo(serv1 = 10, serv2 = 160, serv3 = 160, serv4 = 160, serv5 = 160)
 						sleep(lettersPause)
-						controlServo(10, 160, 160, 160, 10)
+						controlServo(serv1 = 10, serv2 = 160, serv3 = 160, serv4 = 160, serv5 = 10)
 						GUI_hand_queue.put('j')
 					case 'k':
-						controlServo(10, 10, 10, 160, 160)
+						controlServo(serv1 = 10, serv2 = 10, serv3 = 10, serv4 = 160, serv5 = 160)
 						sleep(lettersPause)
-						controlServo(10, 10, 10, 160, 160)
+						controlServo(serv1 = 10, serv2 = 10, serv3 = 10, serv4 = 160, serv5 = 160)
 						sleep(lettersPause)
-						controlServo(10, 10, 10, 160, 160)
+						controlServo(serv1 = 10, serv2 = 10, serv3 = 10, serv4 = 160, serv5 = 160)
 						GUI_hand_queue.put('k')
 					case 'l':
-						controlServo(160, 10, 160, 160, 160)
+						controlServo(serv1 = 160, serv2 = 10, serv3 = 160, serv4 = 160, serv5 = 160)
 						GUI_hand_queue.put('l')
 					case 'm':
-						controlServo(10, 80, 80, 80, 160)
+						controlServo(serv1 = 10, serv2 = 80, serv3 = 80, serv4 = 80, serv5 = 160)
 						GUI_hand_queue.put('m')
 					case 'n':
-						controlServo(10, 80, 80, 160, 160)
+						controlServo(serv1 = 10, serv2 = 80, serv3 = 80, serv4 = 160, serv5 = 160)
 						GUI_hand_queue.put('n')
 					case 'o':
-						controlServo(10, 160, 160, 160, 160)
+						controlServo(serv1 = 10, serv2 = 160, serv3 = 160, serv4 = 160, serv5 = 160)
 						GUI_hand_queue.put('o')
 					case 'p':
-						controlServo(80, 10, 100, 160, 160)
+						controlServo(serv1 = 80, serv2 = 10, serv3 = 100, serv4 = 160, serv5 = 160)
 						GUI_hand_queue.put('p')
 					case 'q':
-						controlServo(80, 80, 160, 160, 160)
+						controlServo(serv1 = 80, serv2 = 80, serv3 = 160, serv4 = 160, serv5 = 160)
 						GUI_hand_queue.put('q')
 					case 'r':
-						controlServo(10, 40, 40, 160, 160)
+						controlServo(serv1 = 10, serv2 = 40, serv3 = 40, serv4 = 160, serv5 = 160)
 						GUI_hand_queue.put('r')
 					case 's':
-						controlServo(10, 160, 160, 160, 160)
+						controlServo(serv1 = 10, serv2 = 160, serv3 = 160, serv4 = 160, serv5 = 160)
 						sleep(lettersPause)
-						controlServo(160, 160, 160, 160, 160)
+						controlServo(serv1 = 160, serv2 = 160, serv3 = 160, serv4 = 160, serv5 = 160)
 						sleep(lettersPause)
-						controlServo(10, 160, 160, 160, 160)
+						controlServo(serv1 = 10, serv2 = 160, serv3 = 160, serv4 = 160, serv5 = 160)
 						GUI_hand_queue.put('s')
 					case 't':
-						controlServo(160, 80, 160, 160, 160)
+						controlServo(serv1 = 160, serv2 = 80, serv3 = 160, serv4 = 160, serv5 = 160)
 						GUI_hand_queue.put('t')
 					case 'u':
-						controlServo(60, 10, 10, 160, 160)
+						controlServo(serv1 = 60, serv2 = 10, serv3 = 10, serv4 = 160, serv5 = 160)
 						GUI_hand_queue.put('u')
 					case 'v':
-						controlServo(10, 10, 10, 160, 160)
+						controlServo(serv1 = 10, serv2 = 10, serv3 = 10, serv4 = 160, serv5 = 160)
 						sleep(lettersPause)
-						controlServo(10, 160, 160, 160, 160)
+						controlServo(serv1 = 10, serv2 = 160, serv3 = 160, serv4 = 160, serv5 = 160)
 						sleep(lettersPause)
-						controlServo(10, 10, 10, 160, 160)
+						controlServo(serv1 = 10, serv2 = 10, serv3 = 10, serv4 = 160, serv5 = 160)
 						GUI_hand_queue.put('v')
 					case 'w':
-						controlServo(10, 10, 10, 10, 160)
+						controlServo(serv1 = 10, serv2 = 10, serv3 = 10, serv4 = 10, serv5 = 160)
 						GUI_hand_queue.put('w')
 					case 'x':
-						controlServo(10, 80, 160, 160, 160)
+						controlServo(serv1 = 10, serv2 = 80, serv3 = 160, serv4 = 160, serv5 = 160)
 						GUI_hand_queue.put('x')
 					case 'y':
-						controlServo(160, 160, 160, 160, 10)
+						controlServo(serv1 = 160, serv2 = 160, serv3 = 160, serv4 = 160, serv5 = 10)
 						GUI_hand_queue.put('y')
 					case 'z':
-						controlServo(10, 10, 160, 160, 160)
+						controlServo(serv1 = 10, serv2 = 10, serv3 = 160, serv4 = 160, serv5 = 160)
 						GUI_hand_queue.put('z')
 			print(" ")
-			controlServo(160, 10, 10, 10, 10)
+			controlServo(serv1 = 160, serv2 = 10, serv3 = 10, serv4 = 10, serv5 = 10)
 			sleep(lettersPause)
 		elif not wordBacklog == [] and wordBacklog[0] == "[censored]":
-			controlServo(160, 10, 10, 10, 10)
+			controlServo(serv1 = 160, serv2 = 10, serv3 = 10, serv4 = 10, serv5 = 10)
 			sleep(0.2)
-			controlServo(10, 160, 160, 160, 160)
+			controlServo(serv1 = 10, serv2 = 160, serv3 = 160, serv4 = 160, serv5 = 160)
 			sleep(0.2)
-			controlServo(160, 10, 10, 10, 10)			
+			controlServo(serv1 = 160, serv2 = 10, serv3 = 10, serv4 = 10, serv5 = 10)			
 			sleep(0.2)
-			controlServo(10, 160, 160, 160, 160)
+			controlServo(serv1 = 10, serv2 = 160, serv3 = 160, serv4 = 160, serv5 = 160)
 			sleep(0.2)
-			controlServo(160, 10, 10, 10, 10)	
+			controlServo(serv1 = 160, serv2 = 10, serv3 = 10, serv4 = 10, serv5 = 10)	
 		if not wordBacklog == []:
 			wordBacklog.remove(wordBacklog[0])
 			
@@ -259,7 +259,7 @@ def letterSwitch():
 Setup()
 sleep(2)
 SetRGBColor(0, 0, 100)
-controlServo(160, 10, 10, 10, 10)
+controlServo(serv1 = 160, serv2 = 10, serv3 = 10, serv4 = 10, serv5 = 10)
 sleep(2)
 
 
