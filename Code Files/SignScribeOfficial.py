@@ -8,6 +8,7 @@ import parserConfig
 from HandControl import controlServo
 import queue
 import UI_Stuff
+import math
 
 #grabs info from config file
 exitWord, wordsPause, lettersPause, autoSave, filter1 = parserConfig.configParser()
@@ -20,11 +21,47 @@ GUI_hand_queue = queue.Queue()
 
 file2 = 'fullTranscript.txt'
 file1 = 'CrossCommunication.txt'
+ButtonPin = 24 # Should be 18
+RGB_B = 17 # Should be 11
+RGB_G = 27 # Should be 13
+RGB_R = 22 # Should be 15
+
 
 #vosk model
 path=r'/home/signscribe/Downloads/SignScribe-master/Organization/VoskModels/vosk-model-small-en-us-0.15'
 
+def Setup():
+	#Where is the setmode it should be set to board but its set to GPIO...
+    RPi.GPIO.setup(ButtonPin, RPi.GPIO.IN, pull_up_down=RPi.GPIO.PUD_UP)
+    RPi.GPIO.setup(RGB_B, RPi.GPIO.OUT)
+    RPi.GPIO.setup(RGB_G, RPi.GPIO.OUT)
+    RPi.GPIO.setup(RGB_R, RPi.GPIO.OUT)
+    RPi.GPIO.output(RGB_B, RPi.GPIO.HIGH)
+    RPi.GPIO.output(RGB_G, RPi.GPIO.HIGH)
+    RPi.GPIO.output(RGB_R, RPi.GPIO.HIGH)
+    global RL
+    global GL
+    global BL
+    RL = RPi.GPIO.PWM(RGB_R, 2000)
+    GL = RPi.GPIO.PWM(RGB_G, 1999)
+    BL = RPi.GPIO.PWM(RGB_B, 5000)
+    RL.start(100)
+    GL.start(100)
+    BL.start(100)
+    
+
+def SetRGBColor(Red, Green, Blue):
+    InvRed = 100 - Red
+    InvGreen = 100 - Green
+    InvBlue = 100 - Blue
+    RL.ChangeDutyCycle(InvRed)
+    GL.ChangeDutyCycle(InvGreen)
+    BL.ChangeDutyCycle(InvBlue)
+
+
 def VoiceToText():
+	ExitButtonPressed = False
+	
 	recognizer = KaldiRecognizer(Model(path), 16000)
 
 	stream = pyaudio.PyAudio().open(format=pyaudio.paInt16, channels=1, rate=16000, input=True, frames_per_buffer=8192)
@@ -32,10 +69,24 @@ def VoiceToText():
 	stream.start_stream()
 	
 	print("Say exit when you want to terminate the program... \n")
-
+	SetRGBColor(0, 100, 0)
 	#reads data
 	while True:
 		data = stream.read(16000)
+		
+		if not RPi.GPIO.input(ButtonPin):
+			print("Button Pressed")
+			with open(file2, 'a') as f2:
+				f2.write(str(fullTranscript) + '\n')
+			print("Contents of text transcript have been automatically saved to ", file2)
+			# stops data collection
+			stream.stop_stream()
+			stream.close()
+			SetRGBColor(100, 0, 0)
+			sleep(2)
+			SetRGBColor(0, 0, 0)
+			exit
+
 
 		#clears cross communication file from previous use
 		with open(file1, 'w') as file:
@@ -64,7 +115,7 @@ def VoiceToText():
 				f.write(str(wordBacklog) + '\n')
 
 			#quits program if exit word has been stated & if autosave is True, appends full transcript to a file
-			if exitWord in text.lower():
+			if exitWord in text.lower() or ExitButtonPressed == True:
 				print("Exiting...\n")
 				print("AUTOSAVE IS: ",autoSave)
 				if autoSave == True:
@@ -73,21 +124,20 @@ def VoiceToText():
 					print("Contents of text transcript have been automatically saved to ", file2)
 					
 				
-				# stops data collection
-				stream.stop_stream()
-				stream.close()
-				exit
+					# stops data collection
+					stream.stop_stream()
+					stream.close()
+					SetRGBColor(100, 0, 0)
+					sleep(2)
+					SetRGBColor(0, 0, 0)
+					exit
 
 
 def letterSwitch():
 	sleep(2)
-	
 	stop = exitWord.split();
-	
-	while True:
-		
+	while True:	
 		sleep(wordsPause)
-
 		#checks if the exit word has been spoken, if it has the hand will not sign it
 		if not wordBacklog == [] and not set(stop).issubset(set(wordBacklog)) and wordBacklog[0] != "[censored]":
 			for letter in wordBacklog[0]: 
@@ -96,7 +146,7 @@ def letterSwitch():
 				#disect word back log into letters & run appropriate function
 				match letter:
 					case 'a':
-						controlServo(80, 160, 160, 160, 160)
+						controlServo(100, 160, 160, 160, 160)
 						GUI_hand_queue.put('a')
 					case 'b':
 						controlServo(10,10,10,10,10)
@@ -105,7 +155,7 @@ def letterSwitch():
 						controlServo(80, 80, 80, 80, 80)
 						GUI_hand_queue.put('c')
 					case 'd':
-						controlServo(10, 160, 160, 160, 10)
+						controlServo(10, 10, 160, 160, 160)
 						GUI_hand_queue.put('d')
 					case 'e':
 						controlServo(10, 160, 160, 160, 160)
@@ -117,7 +167,7 @@ def letterSwitch():
 						controlServo(80, 10, 160, 160, 160)
 						GUI_hand_queue.put('g')
 					case 'h':
-						controlServo(40, 160, 160, 160, 160)
+						controlServo(10, 10, 10, 160, 160)
 						GUI_hand_queue.put('h')
 					case 'i':
 						controlServo(10, 160, 160, 160, 10)
@@ -130,7 +180,11 @@ def letterSwitch():
 						controlServo(10, 160, 160, 160, 10)
 						GUI_hand_queue.put('j')
 					case 'k':
-						controlServo(160, 10, 10, 160, 160)
+						controlServo(10, 10, 10, 160, 160)
+						sleep(lettersPause)
+						controlServo(10, 10, 10, 160, 160)
+						sleep(lettersPause)
+						controlServo(10, 10, 10, 160, 160)
 						GUI_hand_queue.put('k')
 					case 'l':
 						controlServo(160, 10, 160, 160, 160)
@@ -161,7 +215,7 @@ def letterSwitch():
 						controlServo(10, 160, 160, 160, 160)
 						GUI_hand_queue.put('s')
 					case 't':
-						controlServo(10, 80, 60, 160, 160)
+						controlServo(160, 80, 160, 160, 160)
 						GUI_hand_queue.put('t')
 					case 'u':
 						controlServo(60, 10, 10, 160, 160)
@@ -177,7 +231,7 @@ def letterSwitch():
 						controlServo(10, 10, 10, 10, 160)
 						GUI_hand_queue.put('w')
 					case 'x':
-						controlServo(10, 40, 160, 160, 160)
+						controlServo(10, 80, 160, 160, 160)
 						GUI_hand_queue.put('x')
 					case 'y':
 						controlServo(160, 160, 160, 160, 10)
@@ -202,19 +256,22 @@ def letterSwitch():
 			wordBacklog.remove(wordBacklog[0])
 			
 #reset to default position
+Setup()
 sleep(2)
+SetRGBColor(0, 0, 100)
 controlServo(160, 10, 10, 10, 10)
-sleep(4)
+sleep(2)
+
 
 #initiate and run threading (multiprocessing)
-#GUI_Thread = thread.Thread(target=UI_Stuff.GUI_APP,args=[GUI_text_queue, wordBacklog, GUI_hand_queue])
+GUI_Thread = thread.Thread(target=UI_Stuff.GUI_APP,args=[GUI_text_queue, wordBacklog, GUI_hand_queue])
 ServoThread = thread.Thread(target=letterSwitch)
 VoiceThread = thread.Thread(target=VoiceToText)
 
-#GUI_Thread.start()
+GUI_Thread.start()
 ServoThread.start()
 VoiceThread.start()
 
-#GUI_Thread.join()
+GUI_Thread.join()
 ServoThread.join()
 VoiceThread.join()
