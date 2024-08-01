@@ -2,8 +2,7 @@ from adafruit_servokit import ServoKit
 from time import sleep
 from HandControlTest import controlServo
 
-letter = 'z
-'
+letter = 'z'
 	
 match letter:
 	case 'a':
