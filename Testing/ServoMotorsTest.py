@@ -2,11 +2,8 @@ from adafruit_servokit import ServoKit
 from time import sleep
 from HandControlTest import controlServo
 
-letter = ''
-	
-sleep(1)
-controlServo(160, 0, 0, 0, 0, 0, 40, 20)
-
+letter = 'z
+'
 	
 match letter:
 	case 'a':
@@ -28,11 +25,14 @@ match letter:
 	case 'i':
 		controlServo(10, 160, 160, 160, 10)
 	case 'j':
-		controlServo(10, 160, 160, 160, 10)
-		sleep(0.4)
-		controlServo(10, 160, 160, 160, 160)
-		sleep(0.4)
-		controlServo(10, 160, 160, 160, 10)
+		controlServo(serv1 = 10, serv2 = 160, serv3 = 160, serv4 = 160, serv5 = 10, serv6 = 90, serv7 = 90, serv8 = 90)
+		sleep(0.1)
+		controlServo(serv1 = 10, serv2 = 160, serv3 = 160, serv4 = 160, serv5 = 10, serv6 = 90, serv7 = 160, serv8 = 90)
+		sleep(0.1)
+		controlServo(serv1 = 10, serv2 = 160, serv3 = 160, serv4 = 160, serv5 = 10, serv6 = 35, serv7 = 160, serv8 = 90)
+		sleep(0.1)
+		controlServo(serv1 = 10, serv2 = 160, serv3 = 160, serv4 = 160, serv5 = 10, serv6 = 35, serv7 = 140, serv8 = 90)
+		sleep(0.1)
 	case 'k':
 		controlServo(10, 10, 10, 160, 160)
 		sleep(0.4)
@@ -79,3 +79,5 @@ match letter:
 		controlServo(10, 10, 160, 160, 160)
 	case _:
 		sleep(0.005)
+
+sleep(6)
