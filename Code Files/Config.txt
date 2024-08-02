@@ -23,3 +23,10 @@ autoSave = "False"
 [filter]
 # Words must be separated by space and not comma, words in the list will be replaced with a "[censored]" in transcript
 Words to censor = ""
+
+[LED LIGHT MEANING]
+# CANNOT BE CHANGED. Written here for reference.
+Off - Program not running
+Blue - Starting up program, not ready to speak into the mic
+Green - Program is up, ready to speak into the mic
+Red - indicates that the off button has been registered and that the program is saving
