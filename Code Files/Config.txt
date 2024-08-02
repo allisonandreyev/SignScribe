@@ -2,7 +2,7 @@
 # Enter a 'True' or 'False', or the appropriate value under the variable.
 # VALUES MUST BE IN SINGLE QUOTES
 
-[To Be Added Soon]
+[to be added soon]
 # BETA: servoSpeed = 'N/A'
 
 [text conversion]
@@ -24,9 +24,9 @@ autoSave = "False"
 # Words must be separated by space and not comma, words in the list will be replaced with a "[censored]" in transcript
 Words to censor = ""
 
-[LED LIGHT MEANING]
+[LED light meaning]
 # CANNOT BE CHANGED. Written here for reference.
 Off - Program not running
-Blue - Starting up program, not ready to speak into the mic
-Green - Program is up, ready to speak into the mic
+Blue - Starting up the program, not ready to speak into the mic
+Green - The program is up, ready to talk into the mic
 Red - indicates that the off button has been registered and that the program is saving
