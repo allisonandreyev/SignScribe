@@ -6,6 +6,7 @@ def configParser():
     wordsPause=None
     lettersPause=None
     autoSave=None
+    autoLaunch=None
     filter1=[]
     
     with open(file2, 'r') as file:
@@ -25,6 +26,9 @@ def configParser():
             elif "Words to censor" in line:
                 ls = line.split("\"")
                 filter1 = ls[1].split()
-    return exitWord, wordsPause, lettersPause, autoSave, filter1
+            elif "autoLaunch" in line:
+                ls = line.split("\"")
+                autoLaunch = ls[1]
+    return exitWord, wordsPause, lettersPause, autoSave, filter1, autoLaunch
     
 configParser()
