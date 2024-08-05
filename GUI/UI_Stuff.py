@@ -60,61 +60,11 @@ def format_text(wordBacklog):
     return updated_text
 
 def update_hand(hand_queue):
-    match hand_queue:
-        case 'a':
-            return r"C:\Users\user\Downloads\Hand_signs\A.mp4"
-        case 'b':
-            return r"C:\Users\user\Downloads\Hand_signs\B.mp4"
-        case 'c':
-            return r"C:\Users\user\Downloads\Hand_signs\C.mp4"    
-        case 'd':
-            return r"C:\Users\user\Downloads\Hand_signs\D.mp4"
-        case 'e':
-            return r"C:\Users\user\Downloads\Hand_signs\E.mp4"
-        case 'f':
-            return r"C:\Users\user\Downloads\Hand_signs\F.mp4"
-        case 'g':
-            return r"C:\Users\user\Downloads\Hand_signs\E.mp4"
-        case 'h':
-            return r"C:\Users\user\Downloads\Hand_signs\H.mp4"
-        case 'i':
-            return r"C:\Users\user\Downloads\Hand_signs\I.mp4"
-        case 'j':
-            return r"C:\Users\user\Downloads\Hand_signs\J.mp4"
-        case 'k':
-            return r"C:\Users\user\Downloads\Hand_signs\K.mp4"
-        case 'l':
-            return r"C:\Users\user\Downloads\Hand_signs\L.mp4"
-        case 'm':
-            return r"C:\Users\user\Downloads\Hand_signs\M.mp4"
-        case 'n':
-            return r"C:\Users\user\Downloads\Hand_signs\N.mp4"
-        case 'o':
-            return r"C:\Users\user\Downloads\Hand_signs\O.mp4"
-        case 'p':
-            return r"C:\Users\user\Downloads\Hand_signs\P.mp4"
-        case 'q':
-            return r"C:\Users\user\Downloads\Hand_signs\Q.mp4"
-        case 'r':
-            return r"C:\Users\user\Downloads\Hand_signs\R.mp4"
-        case 's':
-            return r"C:\Users\user\Downloads\Hand_signs\A.mp4"
-        case 't':
-            return r"C:\Users\user\Downloads\Hand_signs\T.mp4"
-        case 'u':
-            return r"C:\Users\user\Downloads\Hand_signs\U.mp4"
-        case 'v':
-            return r"C:\Users\user\Downloads\Hand_signs\V.mp4"
-        case 'w':
-            return r"C:\Users\user\Downloads\Hand_signs\W.mp4"
-        case 'x':
-            return r"C:\Users\user\Downloads\Hand_signs\X.mp4"
-        case 'y':
-            return r"C:\Users\user\Downloads\Hand_signs\Y.mp4"
-        case 'z':
-            return r"C:\Users\user\Downloads\Hand_signs\Z.mp4"
-        case _:
-            return r"C:\Users\user\Downloads\Hand_signs\open_palm.mp4"
+    base_path = r"C:\Users\user\Downloads\Hand_signs"
+    if hand_queue in 'abcdefghijklmnopqrstuvwxyz':
+        return fr"{base_path}\{hand_queue.upper()}.mp4"
+    else:
+        return fr"{base_path}\open_palm.mp4"
             
 
 def GUI(text_queue, hand_queue, letter_queue, wordBacklog):
