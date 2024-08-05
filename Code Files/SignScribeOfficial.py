@@ -11,7 +11,7 @@ import UI_Stuff
 import math
 
 #grabs info from config file
-exitWord, wordsPause, lettersPause, autoSave, filter1 = parserConfig.configParser()
+exitWord, wordsPause, lettersPause, autoSave, filter1, autoLaunch = parserConfig.configParser()
 
 wordBacklog = ["abcdefghijklmnopqrstuvwxyz"]
 fullTranscript = []
@@ -264,14 +264,17 @@ sleep(2)
 
 
 #initiate and run threading (multiprocessing)
-GUI_Thread = thread.Thread(target=UI_Stuff.GUI_APP,args=[GUI_text_queue, wordBacklog, GUI_hand_queue])
+if autoLaunch is True:
+	GUI_Thread = thread.Thread(target=UI_Stuff.GUI_APP,args=[GUI_text_queue, wordBacklog, GUI_hand_queue])
 ServoThread = thread.Thread(target=letterSwitch)
 VoiceThread = thread.Thread(target=VoiceToText)
 
-GUI_Thread.start()
+if autoLaunch is True:
+	GUI_Thread.start()
 ServoThread.start()
 VoiceThread.start()
 
-GUI_Thread.join()
+if autoLaunch is True:
+	GUI_Thread.join()
 ServoThread.join()
 VoiceThread.join()
