@@ -11,10 +11,10 @@ exitWord = "stop sign scribe"
 
 [servo control]
 # Pause amount between words (seconds):
-wordsPause = "0"
+wordsPause = "8"
 
-# Pause amount between letters (seconds):
-lettersPause = "0.4"
+# Pause amount between letters that must be greater than or equal to 0.4 (seconds):
+lettersPause = "4"
 
 [save]
 # Auto-save setting:
@@ -32,4 +32,4 @@ Green - The program is up, ready to talk into the mic
 Red - indicates that the off button has been registered and that the program is saving
 
 [GUI]
-autoLaunch = "True"
+autoLaunch = "False"
