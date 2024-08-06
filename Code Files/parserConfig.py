@@ -1,5 +1,5 @@
 def configParser():
-    file2 = 'Config.txt'
+    file2 = '/home/signscribe/Downloads/SignScribe-master/Code Files/Config.txt'
 
     # Config Variables
     exitWord=None
