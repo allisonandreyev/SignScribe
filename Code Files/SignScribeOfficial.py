@@ -21,7 +21,9 @@ GUI_hand_queue = queue.Queue()
 
 file2 = 'fullTranscript.txt'
 file1 = 'CrossCommunication.txt'
+"""
 ButtonPin = 24 # Should be 18
+"""
 RGB_B = 17 # Should be 11
 RGB_G = 27 # Should be 13
 RGB_R = 22 # Should be 15
@@ -32,7 +34,9 @@ path=r'/home/signscribe/Downloads/SignScribe-master/Organization/VoskModels/vosk
 
 def Setup():
 	#Where is the setmode it should be set to board but its set to GPIO...
+    """
     RPi.GPIO.setup(ButtonPin, RPi.GPIO.IN, pull_up_down=RPi.GPIO.PUD_UP)
+    """
     RPi.GPIO.setup(RGB_B, RPi.GPIO.OUT)
     RPi.GPIO.setup(RGB_G, RPi.GPIO.OUT)
     RPi.GPIO.setup(RGB_R, RPi.GPIO.OUT)
@@ -74,6 +78,7 @@ def VoiceToText():
 	while True:
 		data = stream.read(16000)
 		
+		"""
 		if not RPi.GPIO.input(ButtonPin):
 			print("Button Pressed")
 			with open(file2, 'a') as f2:
@@ -86,7 +91,7 @@ def VoiceToText():
 			sleep(2)
 			SetRGBColor(0, 0, 0)
 			exit
-
+		"""
 
 		#clears cross communication file from previous use
 		with open(file1, 'w') as file:
@@ -260,9 +265,10 @@ def letterSwitch():
 						controlServo(serv1 = 10, serv2 = 10, serv3 = 160, serv4 = 160, serv5 = 160, serv6 = 120, serv7 = 160)
 						GUI_hand_queue.put('z')
 						sleep(lettersPause-0.4)
-			controlServo(serv1 = 160, serv2 = 10, serv3 = 10, serv4 = 10, serv5 = 10, serv6 = 90, serv7 = 180)
+			controlServo(serv1 = 160, serv2 = 10, serv3 = 10, serv4 = 10, serv5 = 10, serv6 = 90, serv7 = 90)
 			#GUI_hand_queue.put(' ')
 			sleep(lettersPause)
+		"""
 		elif not wordBacklog == [] and wordBacklog[0] == "[censored]":
 			controlServo(serv1 = 160, serv2 = 10, serv3 = 10, serv4 = 10, serv5 = 10, serv6 = 90, serv7 = 90)
 			sleep(lettersPause)	
@@ -274,6 +280,7 @@ def letterSwitch():
 			sleep(lettersPause)	
 			controlServo(serv1 = 160, serv2 = 10, serv3 = 10, serv4 = 10, serv5 = 10, serv6 = 90, serv7 = 90)
 			sleep(wordsPause)
+		"""
 		if not wordBacklog == []:
 			wordBacklog.remove(wordBacklog[0])
 			
@@ -284,25 +291,22 @@ SetRGBColor(0, 0, 100)
 controlServo(serv1 = 160, serv2 = 10, serv3 = 10, serv4 = 10, serv5 = 10, serv6 = 90, serv7 = 90)
 sleep(2)
 
-
 #initiate and run threading (multiprocessing)
 
-if lettersPause >= 0.4:
+if not lettersPause >= 0.4:
+	lettersPause = 0.4
 
-	if autoLaunch == "True":
-		GUI_Thread = thread.Thread(target=UI_Stuff.GUI_APP,args=[GUI_text_queue, wordBacklog, GUI_hand_queue])
-	ServoThread = thread.Thread(target=letterSwitch)
-	VoiceThread = thread.Thread(target=VoiceToText)
+if autoLaunch == "True":
+	GUI_Thread = thread.Thread(target=UI_Stuff.GUI_APP,args=[GUI_text_queue, wordBacklog, GUI_hand_queue])
+ServoThread = thread.Thread(target=letterSwitch)
+VoiceThread = thread.Thread(target=VoiceToText)
 
-	if autoLaunch == "True":
-		GUI_Thread.start()
-	ServoThread.start()
-	VoiceThread.start()
+if autoLaunch == "True":
+	GUI_Thread.start()
+ServoThread.start()
+VoiceThread.start()
 
-	if autoLaunch == "True":
-		GUI_Thread.join()
-	ServoThread.join()
-	VoiceThread.join()
-
-else:
-	print("Please go to the config file and change the pause between letters to a value greater than or equal to 0.4 seconds.")
+if autoLaunch == "True":
+	GUI_Thread.join()
+ServoThread.join()
+VoiceThread.join()
