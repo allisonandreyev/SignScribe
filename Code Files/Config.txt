@@ -2,34 +2,45 @@
 # Enter a 'True' or 'False', or the appropriate value under the variable.
 # VALUES MUST BE IN SINGLE QUOTES
 
-[to be added soon]
-# BETA: servoSpeed = 'N/A'
+[TEXT CONVERSION]
 
-[text conversion]
 # What word the program will exit on (phrases work too):
+
 exitWord = "stop sign scribe"
 
-[servo control]
+[SERVO CONTROL]
+
 # Pause amount between words (seconds):
+
 wordsPause = "8"
 
 # Pause amount between letters that must be greater than or equal to 0.4 (seconds):
+
 lettersPause = "4"
 
-[save]
+[SAVE]
+
 # Auto-save setting:
+
 autoSave = "False"
 
-[filter]
-# Words must be separated by space and not comma, words in the list will be replaced with a "[censored]" in transcript
+[FILTER]
+
+# Words must be separated by space and not comma
+# Words in the list will be replaced with a "[censored]" in transcript
+# Hand will skip over these words when signing
+
 Words to censor = ""
 
-[LED light meaning]
+[LED LIGHT MANUAL]
+
 # CANNOT BE CHANGED. Written here for reference.
+
 Off - Program not running
 Blue - Starting up the program, not ready to speak into the mic
 Green - The program is up, ready to talk into the mic
 Red - indicates that the off button has been registered and that the program is saving
 
 [GUI]
+
 autoLaunch = "False"
