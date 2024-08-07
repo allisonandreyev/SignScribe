@@ -10,28 +10,26 @@ import queue
 import UI_Stuff
 import math
 
-#grabs info from config file using the configParser() function and assigns to variables
+#grabs info from config file
 exitWord, wordsPause, lettersPause, autoSave, filter1, autoLaunch = parserConfig.configParser()
 
-#initializes variables and queue
-wordBacklog = ["abcdefghijklmnopqrstuvwxyz"]
+wordBacklog = ['hello world']
 fullTranscript = []
 
 GUI_text_queue = queue.Queue()
 GUI_hand_queue = queue.Queue()
+GUI_word_queue = queue.Queue()
 
-#creates file names
 file2 = 'fullTranscript.txt'
+file1 = 'CrossCommunication.txt'
 """
 ButtonPin = 24 # Should be 18
 """
-#LED light color configuration
 RGB_B = 17 # Should be 11
 RGB_G = 27 # Should be 13
 RGB_R = 22 # Should be 15
 
-
-#vosk model path (SHOULD BE CHANGED)
+#vosk model
 path=r'/home/signscribe/Downloads/SignScribe-master/Organization/VoskModels/vosk-model-small-en-us-0.15'
 
 def Setup():
@@ -55,6 +53,7 @@ def Setup():
     GL.start(100)
     BL.start(100)
     
+
 def SetRGBColor(Red, Green, Blue):
     InvRed = 100 - Red
     InvGreen = 100 - Green
@@ -65,8 +64,6 @@ def SetRGBColor(Red, Green, Blue):
 
 
 def VoiceToText():
-
-	#Opens and sets up live audio streaming
 	ExitButtonPressed = False
 	
 	recognizer = KaldiRecognizer(Model(path), 16000)
@@ -77,8 +74,7 @@ def VoiceToText():
 	
 	print("Say exit when you want to terminate the program... \n")
 	SetRGBColor(0, 100, 0)
-	
-	#reads data and uses vosk to interpret text
+	#reads data
 	while True:
 		data = stream.read(16000)
 		
@@ -97,13 +93,16 @@ def VoiceToText():
 			exit
 		"""
 
-		#appends data to full transcript & word backlog IF the data is valid
+		#clears cross communication file from previous use
+		with open(file1, 'w') as file:
+			pass
+
+		#appends data to full transcript & word backlog
 		if recognizer.AcceptWaveform(data) == True:
 			result = recognizer.Result()
 			result_dict = json.loads(result)
 			text = result_dict.get("text","")
 			newText = text.split()
-			#appends new text to work backlog and full transcript, if the word is censored, it appends "[censored]" instead
 			for i in newText:
 				if i not in filter1:
 					wordBacklog.append(i)
@@ -116,20 +115,21 @@ def VoiceToText():
 			#outputs word backlog (for debugging purposes)
 			if not wordBacklog == []:
 				print(str(wordBacklog))
+			#appends cross communication.txt
+			with open(file1, 'a') as f:
+				f.write(str(wordBacklog) + '\n')
 
-			#quits program if exit word has been stated
+			#quits program if exit word has been stated & if autosave is True, appends full transcript to a file
 				if exitWord in text.lower() or ExitButtonPressed == True:
-					#prints status
 					print("Exiting...\n")
 					print("AUTOSAVE IS: ",autoSave)
-					# if autosave is True, appends full transcript to a file
 					if autoSave == True:
 						with open(file2, 'a') as f2:
 							f2.write(str(fullTranscript) + '\n')
 						print("Contents of text transcript have been automatically saved to ", file2)
 						
 					
-					# Stops data collection and sets RGB to turn off
+					# Stops data collection
 					SetRGBColor(100, 0, 0)
 					stream.stop_stream()
 					stream.close()
@@ -137,19 +137,16 @@ def VoiceToText():
 					SetRGBColor(0, 0, 0)
 					exit()
 
-#switch statement which signs letter
+
 def letterSwitch():
 	sleep(2)
 	stop = exitWord.split();
-	
 	while True:	
 		sleep(wordsPause)
-		
 		#checks if the exit word has been spoken, if it has the hand will not sign it
 		if not wordBacklog == [] and not set(stop).issubset(set(wordBacklog)) and wordBacklog[0] != "[censored]":
 			for letter in wordBacklog[0]: 
-				
-				#disect word backlog into letters & run appropriate function based on letter kind
+				#disect word back log into letters & run appropriate function
 				match letter:
 					case 'a':
 						controlServo(serv1 = 100, serv2 = 160, serv3 = 160, serv4 = 160, serv5 = 160, serv6 = 90, serv7 = 90)
@@ -268,16 +265,10 @@ def letterSwitch():
 						controlServo(serv1 = 10, serv2 = 10, serv3 = 160, serv4 = 160, serv5 = 160, serv6 = 120, serv7 = 160)
 						GUI_hand_queue.put('z')
 						sleep(lettersPause-0.4)
-
-			#signs space character (high five position) after every word
 			controlServo(serv1 = 160, serv2 = 10, serv3 = 10, serv4 = 10, serv5 = 10, serv6 = 90, serv7 = 90)
-			
+			GUI_word_queue.put(wordBacklog[0])
 			#GUI_hand_queue.put(' ')
-			
-			#pause amount between each word which is adjusted in CONFIG file
 			sleep(lettersPause)
-		
-		#adjusts how the hand signs a censored word. Currently the hand skips over it, but that can be changed here:
 		"""
 		elif not wordBacklog == [] and wordBacklog[0] == "[censored]":
 			controlServo(serv1 = 160, serv2 = 10, serv3 = 10, serv4 = 10, serv5 = 10, serv6 = 90, serv7 = 90)
@@ -294,7 +285,7 @@ def letterSwitch():
 		if not wordBacklog == []:
 			wordBacklog.remove(wordBacklog[0])
 			
-#reset to the default position
+#reset to default position
 Setup()
 sleep(2)
 SetRGBColor(0, 0, 100)
@@ -303,12 +294,11 @@ sleep(2)
 
 #initiate and run threading (multiprocessing)
 
-#sets lettersPause to .4 if it is less
 if not lettersPause >= 0.4:
 	lettersPause = 0.4
 
 if autoLaunch == "True":
-	GUI_Thread = thread.Thread(target=UI_Stuff.GUI_APP,args=[GUI_text_queue, wordBacklog, GUI_hand_queue])
+	GUI_Thread = thread.Thread(target=UI_Stuff.GUI_APP,args=[GUI_text_queue, wordBacklog, GUI_hand_queue ])
 ServoThread = thread.Thread(target=letterSwitch)
 VoiceThread = thread.Thread(target=VoiceToText)
 
