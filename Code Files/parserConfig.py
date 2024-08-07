@@ -1,15 +1,21 @@
 def configParser():
+    
+    #CONFIG FILE PATH, MUST BE CHANGED
     file2 = '/home/signscribe/Downloads/SignScribe-master/Code Files/Config.txt'
 
-    # Config Variables
+    # Config Variables are initialized
     exitWord=None
     wordsPause=None
     lettersPause=None
     autoSave=None
     autoLaunch=None
     filter1=[]
-    
+
+    #opens file as a readable
     with open(file2, 'r') as file:
+
+        #scans for variable names, splits the line into the variable & what is is assigned to in config
+        #then sets the initialzied variable at the top to equal what is is assigned to in the config file 
         for line in file:
             if "exitWord" in line:
                 ls = line.split("\"")
