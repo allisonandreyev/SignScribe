@@ -200,3 +200,4 @@ def GUI(text_queue, hand_queue):
 def GUI_APP(text_queue, wordBacklog, hand_queue):
     populate_queue(text_queue, wordBacklog)
     GUI(text_queue, hand_queue)
+
