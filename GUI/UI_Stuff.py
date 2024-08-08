@@ -115,7 +115,7 @@ def update_hand_letter(hand_queue):
         case 'z':
             return r"/home/signscribe/Downloads/SignScribe-master/Hand_signs/Z.mp4"
         case _:
-            return r"/home/signscribe/Downloads/SignScribe-master/Hand_signs/A.mp4"
+            return r"/home/signscribe/Downloads/SignScribe-master/Hand_signs/open_palm.mp4"
             
 
 def GUI(text_queue, hand_queue):
@@ -193,15 +193,6 @@ def GUI(text_queue, hand_queue):
         player.set_path(video_path)
         Letter_show.delete(1.0, tk.END)  # Clear the previous hand_sign
         Letter_show.insert(tk.END, hand_sign.upper())  # Insert the current hand_sign
-        highlight_text(hand_sign)
-
-    def highlight_text(hand_sign):
-        text = textbox.get("1.0", tk.END)
-        index = text.lower().find(hand_sign.lower())
-        if index != -1:
-            textbox.tag_remove("highlight", "1.0", tk.END)
-            textbox.tag_add("highlight", f"1.{index}", f"1.{index+1}")
-            textbox.tag_config("highlight", background="yellow", foreground="black")
 
     window.after(100, update_text)
     window.mainloop()
@@ -209,4 +200,3 @@ def GUI(text_queue, hand_queue):
 def GUI_APP(text_queue, wordBacklog, hand_queue):
     populate_queue(text_queue, wordBacklog)
     GUI(text_queue, hand_queue)
-
