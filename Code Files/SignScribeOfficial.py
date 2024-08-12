@@ -127,10 +127,19 @@ Sakib will look into this part for commenting in github !!!!!!!!!!!!!!!!!!!!!!!!
 def VoiceToText():
 	ExitButtonPressed = False
 	
+	#the first few lines are initial setup for vosk and pyaudio
+
+	'''
+ 	a recognizer in vosk terms is the functionality responcible for interpreting the audio into speech.
+  	Here a recognizer is being initialized with a model path and the sample rate of the audio to interpret (in Hertz) in this case it's 16 kHz
+   	NOTE:
+    		-The sample rate must be the same as the sample rate of audio otherwise it may lead to issues in transcription accuracy
+      		-Vosk models run best at 16 kHz sample rated audio but there is leeway for other sample rates
+ 	'''
 	recognizer = KaldiRecognizer(Model(path), 16000)
-
+	
 	stream = pyaudio.PyAudio().open(format=pyaudio.paInt16, channels=1, rate=16000, input=True, frames_per_buffer=8192)
-
+	
 	stream.start_stream()
 	
 	print("Say exit when you want to terminate the program... \n")
