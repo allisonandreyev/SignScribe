@@ -191,7 +191,7 @@ def VoiceToText():
 		"""
 
 		#clears cross communication file from previous use
-		with open(file1, 'w') as file:
+		with open(file2, 'w') as file:
 			pass
 
 		#loop responsible for transcribing raw audio into text
@@ -224,10 +224,7 @@ def VoiceToText():
 			#outputs word backlog (for debugging purposes)
 			if not wordBacklog == []:
 				print(str(wordBacklog))
-			#appends cross communication.txt
-			with open(file1, 'a') as f:
-				f.write(str(wordBacklog) + '\n')
-
+				
 			#quits program if exit word has been stated & if autosave is True, appends full transcript to a file
 				if exitWord in text.lower() or ExitButtonPressed == True:
 					print("Exiting...\n")
@@ -497,4 +494,3 @@ if autoLaunch == "True":
 #the following threads will terminate after execution of the threads are finished 
 ServoThread.join()
 VoiceThread.join()
-
