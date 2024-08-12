@@ -129,7 +129,6 @@ def SetRGBColor(Red, Green, Blue):
 
 '''
 This part of the code pertains to the voice-to-text pipeline at the center of SignScribe
-Sakib will look into this part for commenting in github !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 '''
 def VoiceToText():
 	ExitButtonPressed = False
@@ -141,18 +140,39 @@ def VoiceToText():
   	Here a recognizer is being initialized with a model path and the sample rate of the audio to interpret (in Hertz) in this case it's 16 kHz
    	NOTE:
     		-The sample rate must be the same as the sample rate of audio otherwise it may lead to issues in transcription accuracy
-      		-Vosk models run best at 16 kHz sample rated audio but there is leeway for other sample rates
+      		-Vosk models run best at 16 kHz though other samples rate will be adjusted automatically by vosk
+		-Vosk models other than sampling require audio to be inputted with the following configuration:
+  			-Mono Channel or 1 channel
+     			-Audio format must be in PCM form (often as .WAV or .RAW)
+			-Vosk is typically used with 16-bit audio, but it can handle other bit depths if the audio is correctly interpreted and resampled. 
+   	You will see this note reflected when initializing the microphone
  	'''
 	recognizer = KaldiRecognizer(Model(path), 16000)
-	
+
+	'''
+ 	Pyaudio is a python wrapper for the open source I/O library, PortAudio
+  	A stream is an object that encapsulates PyAudio's functionality, it can be used for various things however here we just use it to read audio
+   	This stream automatically connects to the first known audio device on system, if needed set parameter "input_device_index = #"
+    	pyaudio.paInt16 - sets bit depth of audio to 16 bits
+     	channel = 1 - sets mono audio
+      	rate - the sample rate of the audio (MUST BE THE SAME VALUE AS SET IN RECOGNIZER)
+        input - boolean that sets whether or not the stream will listen through mic
+	frames_per_buffer - The number of frames per buffer. This controls how many audio samples are processed at a time. 
+ 		Smaller buffer sizes reduce latency but increase CPU usage.
+ 	'''
 	stream = pyaudio.PyAudio().open(format=pyaudio.paInt16, channels=1, rate=16000, input=True, frames_per_buffer=8192)
-	
+
+	#initiate stream state of listening through mic
 	stream.start_stream()
 	
 	print("Say exit when you want to terminate the program... \n")
+
+	#indicator LED set to blue
 	SetRGBColor(0, 100, 0)
-	#reads data
+	
+	#loop that reads audio input and transcripts it
 	while True:
+		#data holds the raw audio input from mic
 		data = stream.read(16000)
 		
 		"""
@@ -174,12 +194,23 @@ def VoiceToText():
 		with open(file1, 'w') as file:
 			pass
 
-		#appends data to full transcript & word backlog
+		#loop responsible for transcribing raw audio into text
 		if recognizer.AcceptWaveform(data) == True:
+			
+			#result captures recognizer's raw transcription from recognizer.AcceptWaveform method call
 			result = recognizer.Result()
+			
+   			#The raw output of vosk is a json format with a single "text" key
+			#result_dict translate that raw JSON data into a dictionary 
 			result_dict = json.loads(result)
+
+			#translates the previouse dictionary into pure string text of words 
 			text = result_dict.get("text","")
+
+			#formats string of words into a list of words
 			newText = text.split()
+
+			#stores newly inputed text into wordBackLog and fullTranscript
 			for i in newText:
 				if i not in filter1:
 					wordBacklog.append(i)
@@ -187,6 +218,7 @@ def VoiceToText():
 				else:
 					wordBacklog.append("[censored]")
 					fullTranscript.append("[censored]")
+				#communicates to the GUI the current contents of wordBacklog for real time display
 				GUI_text_queue.put(' '.join(wordBacklog))
 
 			#outputs word backlog (for debugging purposes)
@@ -208,6 +240,7 @@ def VoiceToText():
 					
 					# Stops data collection
 					SetRGBColor(100, 0, 0)
+					#ends stream reading state
 					stream.stop_stream()
 					stream.close()
 					sleep(2)
