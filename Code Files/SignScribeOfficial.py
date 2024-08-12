@@ -51,7 +51,6 @@ true when new text is captured by vosk
 
 fullTranscript - a list that captures the text captured from vosk into a, however unlike wordBacklog, 
 it does not deprecate text 
-
 '''
 wordBacklog = []
 fullTranscript = []
@@ -69,7 +68,6 @@ This allows for the program to save a log of all text ever captured by vosk with
 '''
 file2 = 'fullTranscript.txt'
 
-
 """
 ButtonPin = 24 # Should be 18
 """
@@ -83,21 +81,30 @@ We chose this model due to it's lightweight nature which is perfect for pi
 '''
 path=r'/home/signscribe/Downloads/SignScribe-master/Organization/VoskModels/vosk-model-small-en-us-0.15'
 
-
 '''
-Setup - Elliott please go into detail throughout this part thank you !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+Setup - is where the GPIO pins are setup to control the RGB LED and optionaly, the button.
 '''
 def Setup():
-	#Where is the setmode it should be set to board but its set to GPIO...
+	
+    '''
+    Sets the mode of the specific raspberry pi pins for their corresponding function.
+    '''
     """
     RPi.GPIO.setup(ButtonPin, RPi.GPIO.IN, pull_up_down=RPi.GPIO.PUD_UP)
     """
     RPi.GPIO.setup(RGB_B, RPi.GPIO.OUT)
     RPi.GPIO.setup(RGB_G, RPi.GPIO.OUT)
     RPi.GPIO.setup(RGB_R, RPi.GPIO.OUT)
+
+    '''
+    Sets the original state of the RGB LED GPIO pins.
+    '''
     RPi.GPIO.output(RGB_B, RPi.GPIO.HIGH)
     RPi.GPIO.output(RGB_G, RPi.GPIO.HIGH)
     RPi.GPIO.output(RGB_R, RPi.GPIO.HIGH)
+
+    '''
+    '''
     global RL
     global GL
     global BL
