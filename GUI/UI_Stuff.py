@@ -1,9 +1,46 @@
 import tkinter as tk
+from tkinter import messagebox
 from PIL import Image, ImageTk
 import cv2
 from time import sleep
 import queue
 
+def write_to_file(tk_entry, variable, value_type):
+    try:
+        value = tk_entry.get()
+        
+        # Convert the value to the appropriate type
+        if value_type == 'float':
+            value = float(value)
+        elif value_type == 'bool':
+            value = value.lower() in ['true', '1', 'yes']
+        
+        # Read the current content of config.txt
+        with open(r'/home/signscribe/Downloads/SignScribe-master/Code Files/Config.txt', "r") as file:
+            lines = file.readlines()
+        
+        # Update the value
+        for i, line in enumerate(lines):
+            if line.startswith(variable):
+                if value_type == 'string':
+                    lines[i] = f'{variable} = "{value}"\n'
+                else:
+                    lines[i] = f'{variable} = "{value}"\n'
+                break
+        else:
+            # If the variable is not found, append it
+            if value_type == 'string':
+                lines.append(f'{variable} = "{value}"\n')
+            else:
+                lines.append(f'{variable} = "{value}"\n')
+        
+        # Write the updated content back to config.txt
+        with open(r'/home/signscribe/Downloads/SignScribe-master/Code Files/Config.txt', "w") as file:
+            file.writelines(lines)
+        
+        messagebox.showinfo("Success", f'{variable} value written to config.txt')
+    except ValueError:
+        messagebox.showerror("Error", "Please enter a valid value")
 
 class VideoPlayer:
     def __init__(self, parent_frame, video_path, window):
@@ -117,6 +154,12 @@ def update_hand_letter(hand_queue):
         case _:
             return r"/home/signscribe/Downloads/SignScribe-master/Hand_signs/open_palm.mp4"
             
+def set_config_variables(lettersPause, wordPause, exitWord, autoSave, autoLaunch):
+    write_to_file(lettersPause, "lettersPause", "float")
+    write_to_file(wordPause, "wordsPause", "float")
+    write_to_file(exitWord, "exitWord", "string")
+    write_to_file(autoSave, "autoSave", "bool")
+    write_to_file(autoLaunch, "autoLaunch", "bool")
 
 def GUI(text_queue, hand_queue):
 
@@ -139,7 +182,7 @@ def GUI(text_queue, hand_queue):
     scrollbar = tk.Scrollbar(text_frame, bg="#474747")
     scrollbar.pack(side="right", fill="y")
 
-    textbox = tk.Text(text_frame, bg="#474747", fg="#FFFFFF", wrap="word", yscrollcommand=scrollbar.set, font=('monospace', 18))
+    textbox = tk.Text(text_frame, bg="#474747", fg="#FFFFFF", wrap="word", yscrollcommand=scrollbar.set, font=('Bell Gothic Std Black', 18))
     textbox.pack(fill="both", expand=True)
     scrollbar.config(command=textbox.yview, bg="#474747")
     
@@ -166,11 +209,58 @@ def GUI(text_queue, hand_queue):
     # Add a border to visualize the frame
     Letter_update_frame.config(highlightbackground="white", highlightthickness=4)
 
-    Letter_title = tk.Label(Letter_update_frame, bg ="#474747", fg = "#FFFFFF", text="Letter in current read:", font=('Courier', 18))
+    Letter_title = tk.Label(Letter_update_frame, bg ="#474747", fg = "#FFFFFF", text="Letter in current read:", font=('Bell Gothic Std Black', 18))
     Letter_title.place(x = 10, y = 10)
 
     Letter_show = tk.Text(Letter_update_frame, bg ="#474747", fg = "#FFFFFF", wrap="word", font=('Courier', 120))
     Letter_show.place(x = 250, y = 40, width=200, height=200)
+    
+    Speed_frame = tk.Frame(UI_frame, bg="#474747")
+    Speed_frame.place(
+        x=x_position,
+        y= (2 * (window_height // 30)) + frame_height,
+        width=frame_width,
+        height=frame_height
+    )
+    
+    Speed_frame.config(highlightbackground="white", highlightthickness=4)
+
+    Speed_title = tk.Label(Speed_frame, bg ="#474747", fg = "#FFFFFF", text="Config Settings:", font=('Bell Gothic Std Black', 18))
+    Speed_title.place(x = 10, y = 10)
+
+        # Letter Pause
+    letter_pause_label = tk.Label(Speed_frame, text="Letter Pause", bg ="#474747", fg = "#FFFFFF", font=('Bell Gothic Std Black', 11))
+    letter_pause_label.place(x=frame_width/6, y=80)  # Place label above the entry
+    letter_pause_control = tk.Entry(Speed_frame)
+    letter_pause_control.place(x=frame_width/6, y=100)
+
+    # Word Pause
+    word_pause_label = tk.Label(Speed_frame, text="Word Pause", bg ="#474747", fg = "#FFFFFF", font=('Bell Gothic Std Black', 11))
+    word_pause_label.place(x=frame_width/6, y=130)  # Place label above the entry
+    word_pause_control = tk.Entry(Speed_frame)
+    word_pause_control.place(x=frame_width/6, y=150)
+
+    # Exit Word
+    exit_word_label = tk.Label(Speed_frame, text="Exit Word", bg ="#474747", fg = "#FFFFFF", font=('Bell Gothic Std Black', 11))
+    exit_word_label.place(x=frame_width/6, y=180)  # Place label above the entry
+    exit_word_control = tk.Entry(Speed_frame)
+    exit_word_control.place(x=frame_width/6, y=200)
+
+    # Auto Save
+    auto_save_label = tk.Label(Speed_frame, text="Auto Save", bg ="#474747", fg = "#FFFFFF", font=('Bell Gothic Std Black', 11))
+    auto_save_label.place(x=4 * (frame_width/6), y=80)  # Place label above the entry
+    auto_save_control = tk.Entry(Speed_frame)
+    auto_save_control.place(x=4 * (frame_width/6), y=100)
+
+    # Auto Launch GUI
+    auto_launch_label = tk.Label(Speed_frame, text="Auto Launch GUI", bg ="#474747", fg = "#FFFFFF", font=('Bell Gothic Std Black', 11))
+    auto_launch_label.place(x=4 * (frame_width/6), y=130)  # Place label above the entry
+    auto_launch_control = tk.Entry(Speed_frame)
+    auto_launch_control.place(x=4 * (frame_width/6), y=150)
+
+
+    Set_speed = tk.Button(Speed_frame, text="Set variables", command=lambda: set_config_variables(letter_pause_control, word_pause_control, exit_word_control, auto_save_control, auto_launch_control))
+    Set_speed.place(x = frame_height, y = 250)
 
     def update_text():
         try:
@@ -200,4 +290,3 @@ def GUI(text_queue, hand_queue):
 def GUI_APP(text_queue, wordBacklog, hand_queue):
     populate_queue(text_queue, wordBacklog)
     GUI(text_queue, hand_queue)
-
