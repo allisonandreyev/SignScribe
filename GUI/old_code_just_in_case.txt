@@ -163,7 +163,27 @@ def GUI(text_queue, hand_queue, letter_queue, wordBacklog):
     Letter_show = tk.Text(Letter_update_frame, bg ="#474747", fg = "#FFFFFF", wrap="word", font=('Bell Gothic Std Black', 120))
     Letter_show.place(x = 250, y = 40, width=200, height=200)
 
-        # Word Pause
+    
+    Speed_frame = tk.Frame(UI_frame, bg="#474747")
+    Speed_frame.place(
+        x=x_position,
+        y= (2 * (window_height // 30)) + frame_height,
+        width=frame_width,
+        height=frame_height
+    )
+
+    Speed_frame.config(highlightbackground="white", highlightthickness=4)
+
+    Speed_title = tk.Label(Speed_frame, bg ="#474747", fg = "#FFFFFF", text="Config Settings:", font=('Bell Gothic Std Black', 18))
+    Speed_title.place(x = 10, y = 10)
+
+        # Letter Pause
+    letter_pause_label = tk.Label(Speed_frame, text="Letter Pause", bg ="#474747", fg = "#FFFFFF", font=('Bell Gothic Std Black', 12))
+    letter_pause_label.place(x=frame_width/6, y=50)  # Place label above the entry
+    letter_pause_control = tk.Entry(Speed_frame)
+    letter_pause_control.place(x=frame_width/6, y=100)
+
+    # Word Pause
     word_pause_label = tk.Label(Speed_frame, text="Word Pause", bg ="#474747", fg = "#FFFFFF", font=('Bell Gothic Std Black', 12))
     word_pause_label.place(x=frame_width/6, y=80)  # Place label above the entry
     word_pause_control = tk.Entry(Speed_frame)
@@ -190,7 +210,6 @@ def GUI(text_queue, hand_queue, letter_queue, wordBacklog):
 
     Set_speed = tk.Button(Speed_frame, text="Set variables", command=lambda: set_config_variables(letter_pause_control, word_pause_control, exit_word_control, auto_save_control, auto_launch_control))
     Set_speed.place(x = frame_height, y = 210)
-
     def update_text():
         try:
             new_text = text_queue.get_nowait()
