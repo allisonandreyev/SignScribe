@@ -258,9 +258,6 @@ def letterSwitch():
 	
 	#main loop that process through the wordBacklog
 	while True:
-			
-		#each iteration of this while loop will wait a wordsPause amount of seconds 
-		sleep(wordsPause)
 		
 		#checks if the exitWord has been spoken, if it has the hand will not sign it
 		if not wordBacklog == [] and not set(stop).issubset(set(wordBacklog)) and wordBacklog[0] != "[censored]":
@@ -423,8 +420,8 @@ def letterSwitch():
 			#resets the pose of the hand into a 'default' open palm pose			
 			controlServo(serv1 = 160, serv2 = 10, serv3 = 10, serv4 = 10, serv5 = 10, serv6 = 90, serv7 = 90)
 			
-			#at the end of each letter iteration the loop waits a lettersPause amount of seconds
-			sleep(lettersPause)
+			#at the end of each letter iteration the loop waits a wordsPause amount of seconds
+			sleep(wordsPause)
 		"""
 		elif not wordBacklog == [] and wordBacklog[0] == "[censored]":
 			controlServo(serv1 = 160, serv2 = 10, serv3 = 10, serv4 = 10, serv5 = 10, serv6 = 90, serv7 = 90)
