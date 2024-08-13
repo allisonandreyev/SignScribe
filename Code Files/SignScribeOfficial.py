@@ -30,7 +30,7 @@ import RPi.GPIO
 import parserConfig
 from HandControl import controlServo
 import queue
-import InterfaceMain
+import UI_Stuff
 import math
 
 '''
@@ -52,7 +52,7 @@ true when new text is captured by vosk
 fullTranscript - a list that captures the text captured from vosk into a, however unlike wordBacklog, 
 it does not deprecate text 
 '''
-wordBacklog = []
+wordBacklog = ["abcdefghijklmnopqrstuvwxyz"]
 fullTranscript = []
 
 '''
@@ -295,7 +295,7 @@ def letterSwitch():
 						sleep(lettersPause)
 						
 					case 'e':
-						controlServo(serv1 = 50, serv2 = 140, serv3 = 140, serv4 = 125, serv5 = 120, serv6 = 90, serv7 = 90)
+						controlServo(serv1 = 50, serv2 = 110, serv3 = 115, serv4 = 125, serv5 = 120, serv6 = 90, serv7 = 90)
 						GUI_hand_queue.put('e')
 						sleep(lettersPause)
 						
@@ -305,12 +305,12 @@ def letterSwitch():
 						sleep(lettersPause)
 						
 					case 'g':
-						controlServo(serv1 = 80, serv2 = 40, serv3 = 160, serv4 = 160, serv5 = 160, serv6 = 180, serv7 = 180)
+						controlServo(serv1 = 80, serv2 = 40, serv3 = 160, serv4 = 160, serv5 = 160, serv6 = 180, serv7 = 135)
 						GUI_hand_queue.put('g')
 						sleep(lettersPause)
 						
 					case 'h':
-						controlServo(serv1 = 80, serv2 = 40, serv3 = 60, serv4 = 160, serv5 = 160, serv6 = 180, serv7 = 180)
+						controlServo(serv1 = 10, serv2 = 40, serv3 = 80, serv4 = 160, serv5 = 160, serv6 = 180, serv7 = 180)
 						GUI_hand_queue.put('h')
 						sleep(lettersPause)
 						
@@ -336,7 +336,7 @@ def letterSwitch():
 						sleep(lettersPause)
 						
 					case 'l':
-						controlServo(serv1 = 160, serv2 = 10, serv3 = 160, serv4 = 160, serv5 = 160, serv6 = 180, serv7 = 90)
+						controlServo(serv1 = 160, serv2 = 10, serv3 = 160, serv4 = 160, serv5 = 160, serv6 = 90, serv7 = 90)
 						GUI_hand_queue.put('l')
 						sleep(lettersPause)
 						
@@ -366,7 +366,7 @@ def letterSwitch():
 						sleep(lettersPause)
 						
 					case 'r':
-						controlServo(serv1 = 10, serv2 = 40, serv3 = 40, serv4 = 160, serv5 = 160, serv6 = 90, serv7 = 90)
+						controlServo(serv1 = 10, serv2 = 60, serv3 = 40, serv4 = 160, serv5 = 160, serv6 = 180, serv7 = 90)
 						GUI_hand_queue.put('r')
 						sleep(lettersPause)
 						
@@ -376,7 +376,7 @@ def letterSwitch():
 						sleep(lettersPause)
 						
 					case 't':
-						controlServo(serv1 = 160, serv2 = 80, serv3 = 160, serv4 = 160, serv5 = 160, serv6 = 90, serv7 = 90)
+						controlServo(serv1 = 10, serv2 = 80, serv3 = 160, serv4 = 160, serv5 = 160, serv6 = 90, serv7 = 90)
 						GUI_hand_queue.put('t')
 						sleep(lettersPause)
 						
@@ -386,7 +386,7 @@ def letterSwitch():
 						sleep(lettersPause)
 						
 					case 'v':
-						controlServo(serv1 = 10, serv2 = 10, serv3 = 160, serv4 = 10, serv5 = 160, serv6 = 90, serv7 = 90)
+						controlServo(serv1 = 10, serv2 = 40, serv3 = 10, serv4 = 160, serv5 = 160, serv6 = 90, serv7 = 90)
 						GUI_hand_queue.put('v')
 						sleep(lettersPause)
 						
@@ -396,7 +396,7 @@ def letterSwitch():
 						sleep(lettersPause)
 						
 					case 'x':
-						controlServo(serv1 = 10, serv2 = 80, serv3 = 160, serv4 = 160, serv5 = 160, serv6 = 90, serv7 = 90)
+						controlServo(serv1 = 10, serv2 = 80, serv3 = 160, serv4 = 160, serv5 = 160, serv6 = 180, serv7 = 90)
 						GUI_hand_queue.put('x')
 						sleep(lettersPause)
 						
@@ -466,7 +466,7 @@ if not lettersPause >= 0.4:
 #GUI_Thread is responsible for everything to do with GUI, if it is disabled then no window will show up on program startup
 #if the user defined autoLaunch permits the GUI to automatically launch on startup of program then the GUI thread will initiate
 if autoLaunch == "True":
-	GUI_Thread = thread.Thread(target=InterfaceMain.GUI_APP,args=[GUI_text_queue, wordBacklog, GUI_hand_queue])
+	GUI_Thread = thread.Thread(target=UI_Stuff.GUI_APP,args=[GUI_text_queue, wordBacklog, GUI_hand_queue])
 
 #ServoThread - it processes the text and translates it into letter posing/motions for the robotic hand and GUI 
 #ServoThread is initialized
