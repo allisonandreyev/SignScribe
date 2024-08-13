@@ -30,7 +30,7 @@ import RPi.GPIO
 import parserConfig
 from HandControl import controlServo
 import queue
-import UI_Stuff
+import InterfaceMain
 import math
 
 '''
@@ -466,7 +466,7 @@ if not lettersPause >= 0.4:
 #GUI_Thread is responsible for everything to do with GUI, if it is disabled then no window will show up on program startup
 #if the user defined autoLaunch permits the GUI to automatically launch on startup of program then the GUI thread will initiate
 if autoLaunch == "True":
-	GUI_Thread = thread.Thread(target=UI_Stuff.GUI_APP,args=[GUI_text_queue, wordBacklog, GUI_hand_queue])
+	GUI_Thread = thread.Thread(target=InterfaceMain.GUI_APP,args=[GUI_text_queue, wordBacklog, GUI_hand_queue])
 
 #ServoThread - it processes the text and translates it into letter posing/motions for the robotic hand and GUI 
 #ServoThread is initialized
