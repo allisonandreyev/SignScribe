@@ -10,6 +10,7 @@ ServoController = ServoKit(channels = 16)
 Function that allows for ease of controlling all seven servos through one line
 '''
 def controlServo(serv1 = 0, serv2 = 0, serv3 = 0, serv4 = 0, serv5 = 0, serv6 = 90, serv7 = 90):
+	
 	'''
  	Sets angle of each servo
  	'''
