@@ -30,7 +30,7 @@ import RPi.GPIO
 import parserConfig
 from HandControl import controlServo
 import queue
-import UI_Stuff
+import InterfaceMain
 import math
 
 '''
@@ -104,6 +104,7 @@ def Setup():
     RPi.GPIO.output(RGB_R, RPi.GPIO.HIGH)
 
     '''
+    Creates global variables to allow control of RBG using PWM in other functions.
     '''
     global RL
     global GL
@@ -111,18 +112,30 @@ def Setup():
     RL = RPi.GPIO.PWM(RGB_R, 2000)
     GL = RPi.GPIO.PWM(RGB_G, 1999)
     BL = RPi.GPIO.PWM(RGB_B, 5000)
+
+    '''
+    Begins RGB LED with the color blue to indicate that the code is starting but not ready yet.
+    '''
     RL.start(100)
     GL.start(100)
     BL.start(100)
     
 
 '''
-SetRGBColor - Elliott please go into detail throughout this part thank you !!!!!!!!!!!!!!!!!!!!!!!
+SetRGBColor - Function used to simplify setting the RGB LED to a different color from a range of 0-100.
 '''
 def SetRGBColor(Red, Green, Blue):
+	
+    '''
+    Inverts the inputted value to the corresponding value for the RGB LED.
+    '''
     InvRed = 100 - Red
     InvGreen = 100 - Green
     InvBlue = 100 - Blue
+
+    '''
+    Sets each of the 3 LEDs in the RGB LED to their corresponding values.
+    '''
     RL.ChangeDutyCycle(InvRed)
     GL.ChangeDutyCycle(InvGreen)
     BL.ChangeDutyCycle(InvBlue)
@@ -161,21 +174,33 @@ def VoiceToText():
  		Smaller buffer sizes reduce latency but increase CPU usage.
  	'''
 	stream = pyaudio.PyAudio().open(format=pyaudio.paInt16, channels=1, rate=16000, input=True, frames_per_buffer=8192)
-
-	#initiate stream state of listening through mic
+	
+        '''
+	initiate stream state of listening through mic.
+ 	'''
 	stream.start_stream()
 	
 	print("Say exit when you want to terminate the program... \n")
 
-	#indicator LED set to blue
+	'''
+	RGB LED set to green
+        '''
 	SetRGBColor(0, 100, 0)
-	
-	#loop that reads audio input and transcripts it
+
+	'''
+	loop that reads audio input and transcripts it
+ 	'''
 	while True:
-		#data holds the raw audio input from mic
-		data = stream.read(16000)
 		
-		"""
+		'''
+		data holds the raw audio input from mic.
+  		'''
+		data = stream.read(16000)
+
+		'''
+  		Optional code for implementing button that stops mechanical hand and saves transcript.
+		'''
+		'''
 		if not RPi.GPIO.input(ButtonPin):
 			print("Button Pressed")
 			with open(file2, 'a') as f2:
@@ -188,29 +213,43 @@ def VoiceToText():
 			sleep(2)
 			SetRGBColor(0, 0, 0)
 			exit
-		"""
-
-		#clears cross communication file from previous use
+		'''
+		
+		'''
+		clears cross communication file from previous use
+		'''
 		with open(file2, 'w') as file:
 			pass
 
-		#loop responsible for transcribing raw audio into text
+		'''
+		loop responsible for transcribing raw audio into text
+  		'''
 		if recognizer.AcceptWaveform(data) == True:
-			
-			#result captures recognizer's raw transcription from recognizer.AcceptWaveform method call
+
+			'''
+			result captures recognizer's raw transcription from recognizer.AcceptWaveform method call
+   			'''
 			result = recognizer.Result()
-			
-   			#The raw output of vosk is a json format with a single "text" key
-			#result_dict translate that raw JSON data into a dictionary 
+
+			'''
+   			The raw output of vosk is a json format with a single "text" key
+			result_dict translate that raw JSON data into a dictionary 
+   			'''
 			result_dict = json.loads(result)
 
-			#translates the previouse dictionary into pure string text of words 
+			'''
+			translates the previouse dictionary into pure string text of words 
+   			'''
 			text = result_dict.get("text","")
 
-			#formats string of words into a list of words
+			'''
+			formats string of words into a list of words
+   			'''
 			newText = text.split()
 
-			#stores newly inputed text into wordBackLog and fullTranscript
+			'''
+			stores newly inputed text into wordBackLog and fullTranscript
+   			'''
 			for i in newText:
 				if i not in filter1:
 					wordBacklog.append(i)
@@ -218,14 +257,20 @@ def VoiceToText():
 				else:
 					wordBacklog.append("[censored]")
 					fullTranscript.append("[censored]")
-				#communicates to the GUI the current contents of wordBacklog for real time display
+				'''
+				communicates to the GUI the current contents of wordBacklog for real time display
+    				'''
 				GUI_text_queue.put(' '.join(wordBacklog))
 
-			#outputs word backlog (for debugging purposes)
+			'''
+			outputs word backlog (for debugging purposes)
+   			'''
 			if not wordBacklog == []:
 				print(str(wordBacklog))
 				
-			#quits program if exit word has been stated & if autosave is True, appends full transcript to a file
+			'''
+			quits program if exit word has been stated & if autosave is True, appends full transcript to a file
+   			'''
 				if exitWord in text.lower() or ExitButtonPressed == True:
 					print("Exiting...\n")
 					print("AUTOSAVE IS: ",autoSave)
@@ -234,10 +279,14 @@ def VoiceToText():
 							f2.write(str(fullTranscript) + '\n')
 						print("Contents of text transcript have been automatically saved to ", file2)
 						
-					
-					# Stops data collection
+					'''
+					Stops data collection
+     					'''
 					SetRGBColor(100, 0, 0)
-					#ends stream reading state
+
+					'''
+					Ends stream reading state
+     					'''
 					stream.stop_stream()
 					stream.close()
 					sleep(2)
@@ -249,34 +298,51 @@ This function encapsulates the central control flow process of our hand and GUI.
 It takes in wordBacklog and iterates through each letter to be signed by the robotic hand
 '''
 def letterSwitch():
-	#Elliot please expand on the purpose sleep statement thank you   !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-	sleep(2)
-	
-	#stop -  translates the raw string of user-defined exitWord into a detectable list
-	#when this list is detected in wordBacklog the program with terminate 
+
+	'''
+	stop -  translates the raw string of user-defined exitWord into a detectable list
+	when this list is detected in wordBacklog the program with terminate 
+        '''
 	stop = exitWord.split();
 	
-	#main loop that process through the wordBacklog
+	'''
+	main loop that process through the wordBacklog
+ 	'''
 	while True:
 		
-		#checks if the exitWord has been spoken, if it has the hand will not sign it
+		'''
+		checks if the exitWord has been spoken, if it has the hand will not sign it
+  		'''
 		if not wordBacklog == [] and not set(stop).issubset(set(wordBacklog)) and wordBacklog[0] != "[censored]":
-			
-			#disect wordbacklog into letters & run appropriate function
+
+			'''
+			disect wordbacklog into letters & run appropriate function
+   			'''
 			for letter in wordBacklog[0]:
-				#main switch statement that has the robotics hand sign each letter 
+				
+				'''
+				main switch statement that has the robotics hand sign each letter 
+    				'''
 				match letter:
-					
-					#example: when a is detected in wordBacklog[0] (first word in wordBacklog at the moment)
+
+					'''
+					example: when a is detected in wordBacklog[0] (first word in wordBacklog at the moment)
+     					'''
 					case 'a':
-						
-						#controlServo is called and each motor is set to these specific position to emulate the equivalent motion/pose expected in ASL
+
+						'''
+						controlServo is called and each motor is set to these specific position to emulate the equivalent motion/pose expected in ASL
+      						'''
 						controlServo(serv1 = 100, serv2 = 160, serv3 = 160, serv4 = 160, serv5 = 160, serv6 = 90, serv7 = 90)
-						
-						#GUI_hand_queue captures the current letter in process and sends it to the GUI thread for animating
+
+						'''
+						GUI_hand_queue captures the current letter in process and sends it to the GUI thread for animating
+      						'''
 						GUI_hand_queue.put('a')
-						
-						#after each pose the hand waits lettersPause amount of seconds before moving on
+
+						'''
+						after each pose the hand waits lettersPause amount of seconds before moving on
+      						'''
 						sleep(lettersPause)
 						
 					case 'b':
@@ -416,13 +482,21 @@ def letterSwitch():
 						controlServo(serv1 = 10, serv2 = 10, serv3 = 160, serv4 = 160, serv5 = 160, serv6 = 120, serv7 = 160)
 						GUI_hand_queue.put('z')
 						sleep(lettersPause-0.4)
-						
-			#resets the pose of the hand into a 'default' open palm pose			
+
+			'''
+			resets the pose of the hand into a 'default' open palm pose
+   			'''
 			controlServo(serv1 = 160, serv2 = 10, serv3 = 10, serv4 = 10, serv5 = 10, serv6 = 90, serv7 = 90)
-			
-			#at the end of each letter iteration the loop waits a wordsPause amount of seconds
+
+			'''
+			at the end of each letter iteration the loop waits a wordsPause amount of seconds
+   			'''
 			sleep(wordsPause)
-		"""
+
+		'''
+		Optional code used to censor inappropriate words
+		'''
+		'''
 		elif not wordBacklog == [] and wordBacklog[0] == "[censored]":
 			controlServo(serv1 = 160, serv2 = 10, serv3 = 10, serv4 = 10, serv5 = 10, serv6 = 90, serv7 = 90)
 			sleep(lettersPause)	
@@ -434,60 +508,85 @@ def letterSwitch():
 			sleep(lettersPause)	
 			controlServo(serv1 = 160, serv2 = 10, serv3 = 10, serv4 = 10, serv5 = 10, serv6 = 90, serv7 = 90)
 			sleep(wordsPause)
-		"""
-		
-		#checks if wordBacklog is empty
+		'''
+				
+		'''
+		checks if wordBacklog is empty
+		'''
 		if not wordBacklog == []:
-			
-			#removes words have been fully signed at the end of the iteration
+				
+			'''
+			removes words have been fully signed at the end of the iteration
+   			'''
 			wordBacklog.remove(wordBacklog[0])
-			
-#actual running of program starts here
 
+'''			
+actual running of program starts here
+'''
 Setup()
-
-#Elliott please explain the purpose of this sleep statement thank you !!!!!!!!!!!!!!!!!!
-sleep(2)
 
 SetRGBColor(0, 0, 100)
 
-#starts robotic hand off in 'default' open  palm pose
+'''
+starts robotic hand off in 'default' open  palm pose
+'''
 controlServo(serv1 = 160, serv2 = 10, serv3 = 10, serv4 = 10, serv5 = 10, serv6 = 90, serv7 = 90)
 
-#Elliott please explain the purpose of this sleep statement thank you !!!!!!!!!!!!!!!!!!!
+
+'''
+Allows hand to move to default position before starting
+'''
 sleep(2)
 
-#initiate and run threading (multiprocessing)
+'''
+initiate and run threading (multiprocessing)
+'''
 
-#fail safe so that the robotic hand has a minimum of 0.4 seconds in order to play out in a legible pace
+'''
+fail safe so that the robotic hand has a minimum of 0.4 seconds in order to play out in a legible pace
+'''
 if not lettersPause >= 0.4:
 	lettersPause = 0.4
 
-#GUI_Thread is responsible for everything to do with GUI, if it is disabled then no window will show up on program startup
-#if the user defined autoLaunch permits the GUI to automatically launch on startup of program then the GUI thread will initiate
+'''
+GUI_Thread is responsible for everything to do with GUI, if it is disabled then no window will show up on program startup
+if the user defined autoLaunch permits the GUI to automatically launch on startup of program then the GUI thread will initiate
+'''
 if autoLaunch == "True":
-	GUI_Thread = thread.Thread(target=UI_Stuff.GUI_APP,args=[GUI_text_queue, wordBacklog, GUI_hand_queue])
+	GUI_Thread = thread.Thread(target=InterfaceMain.GUI_APP,args=[GUI_text_queue, wordBacklog, GUI_hand_queue])
 
-#ServoThread - it processes the text and translates it into letter posing/motions for the robotic hand and GUI 
-#ServoThread is initialized
+'''
+ServoThread - it processes the text and translates it into letter posing/motions for the robotic hand and GUI 
+ServoThread is initialized
+'''
 ServoThread = thread.Thread(target=letterSwitch)
 
-#VoiceThread is responsible for retrieving audio from the microphone and translating said audio into text 
-#VoiceThread is initialized
+'''
+VoiceThread is responsible for retrieving audio from the microphone and translating said audio into text 
+VoiceThread is initialized
+'''
 VoiceThread = thread.Thread(target=VoiceToText)
-
-#if the user defined autoLaunch permits the GUI to automatically launch on startup of program then the GUI thread will start execution
+	
+'''
+if the user defined autoLaunch permits the GUI to automatically launch on startup of program then the GUI thread will start execution
+'''
 if autoLaunch == "True":
 	GUI_Thread.start()
 
-#the following threads with commence execution 
+'''
+the following threads with commence execution 
+'''
 ServoThread.start()
 VoiceThread.start()
 
-#if the user defined autoLaunch permits the GUI to automatically launch on startup of program then the GUI thread will be terminated after execution finishes
+'''
+if the user defined autoLaunch permits the GUI to automatically launch on startup of program then the GUI thread will be terminated after execution finishes
+'''
 if autoLaunch == "True":
 	GUI_Thread.join()
-	
-#the following threads will terminate after execution of the threads are finished 
+
+'''
+the following threads will terminate after execution of the threads are finished 
+'''
 ServoThread.join()
 VoiceThread.join()
