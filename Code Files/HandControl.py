@@ -2,17 +2,17 @@ import RPi.GPIO
 from adafruit_servokit import ServoKit
 
 '''
-Creates ServoController object used for controlling servos
+Creates ServoController object used for controlling servos.
 '''
 ServoController = ServoKit(channels = 16)
 
 '''
-Function that allows for ease of controlling all seven servos through one line
+Function that allows for ease of controlling all seven servos through one line.
 '''
 def controlServo(serv1 = 0, serv2 = 0, serv3 = 0, serv4 = 0, serv5 = 0, serv6 = 90, serv7 = 90):
 	
 	'''
- 	Sets angle of each servo
+ 	Sets angle of each servo.
  	'''
 	ServoController.servo[1].angle = serv1
 	ServoController.servo[2].angle = serv2
