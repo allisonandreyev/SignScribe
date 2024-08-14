@@ -306,7 +306,9 @@ def GUI(text_queue, hand_queue):
     Letter_show = tk.Text(Letter_update_frame, bg ="#474747", fg = "#FFFFFF", wrap="word", font=('Courier', 120))
     Letter_show.place(x = 250, y = 40, width=200, height=200)
 
-    
+    '''
+    Speed_frame the box element that contains the interface with the config file as a recap the variables in configuration are:
+    '''
     Speed_frame = tk.Frame(UI_frame, bg="#474747")
     Speed_frame.place(
         x=x_position,
