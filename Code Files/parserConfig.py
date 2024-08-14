@@ -1,3 +1,6 @@
+'''
+Function for reading config file.
+'''
 def configParser():
     file2 = '/home/signscribe/Downloads/SignScribe-master/Code Files/Config.txt'
 
