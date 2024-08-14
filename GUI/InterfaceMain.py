@@ -405,7 +405,7 @@ def GUI(text_queue, hand_queue):
         try:
             '''
             here hand_queue is captured by hand_sign (hand_queue communicates the letter the robot is currently signing)
-            then hand_sign is 
+            then hand_sign is is inputted into update hand for updating which graphics is played for GUI
             '''
             hand_sign = hand_queue.get_nowait()
             update_hand(hand_sign)
@@ -414,15 +414,37 @@ def GUI(text_queue, hand_queue):
 
         window.after(100, update_text)
 
+    '''
+    How the 3D hand works is that a short pre-rendered mp4 video if the hand doing any letter is played for every letter in read
+    This function is responsible for updating the which mp4 to point and play to for ever letter in read
+    This function also updated the letter_show functionality in displaying current letter in read real time
+    '''
     def update_hand(hand_sign):
+        '''
+        updating a new mp4 to point and play to
+        '''
         video_path = update_hand_letter(hand_sign)
         player.set_path(video_path)
+
+        '''
+        letter_show being reset everytime a new letter is communicated by hand_sign
+        '''
         Letter_show.delete(1.0, tk.END)  # Clear the previous hand_sign
         Letter_show.insert(tk.END, hand_sign.upper())  # Insert the current hand_sign
 
+    '''
+    update_text is called again (recursion)
+    '''
     window.after(100, update_text)
     window.mainloop()
 
+#this is the entirety of this code encapsulated into this function, for threading
 def GUI_APP(text_queue, wordBacklog, hand_queue):
+    '''
+    initially processes queues
+    '''
     populate_queue(text_queue, wordBacklog)
+    '''
+    draws everything
+    '''
     GUI(text_queue, hand_queue)
