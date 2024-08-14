@@ -42,45 +42,96 @@ def write_to_file(tk_entry, variable, value_type):
     except ValueError:
         messagebox.showerror("Error", "Please enter a valid value")
 
+
 class VideoPlayer:
     def __init__(self, parent_frame, video_path, window):
+        """
+        Initialize the VideoPlayer class.
+
+        Parameters:
+        - parent_frame: The Tkinter frame where the video will be displayed.
+        - video_path: The file path of the video to be played.
+        - window: The main Tkinter window, used to get screen dimensions.
+        """
         self.parent_frame = parent_frame
         self.window = window
         self.video_path = video_path
+
+        # Initialize the video capture object to read the video file.
         self.cap = cv2.VideoCapture(video_path)
 
+        # Create a label widget within the parent_frame to display video frames.
         self.label = tk.Label(parent_frame)
+        
+        # Set the label's position and size within the parent_frame.
         self.label.place(x=0, y=0, width=window.winfo_screenwidth()//2, height=window.winfo_screenheight()//2)
 
+        # Set a flag to indicate that the video is currently playing.
         self.playing = True
+        
+        # Start updating the frames to display the video.
         self.update_frame()
 
     def set_path(self, path):
+        """
+        Update the video file path and reset the video playback.
+
+        Parameters:
+        - path: The new file path of the video to be played.
+        """
         self.video_path = path
-        self.cap.release()  # Release the previous video capture
-        self.cap = cv2.VideoCapture(self.video_path)  # Open the new video
-        self.playing = True  # Reset playing state
+        
+        # Release the current video capture object to free up resources.
+        self.cap.release()
+        
+        # Create a new video capture object for the new video file.
+        self.cap = cv2.VideoCapture(self.video_path)
+        
+        # Reset the playing flag and start displaying the new video.
+        self.playing = True
         self.update_frame()
 
     def update_frame(self):
+        """
+        Read the next frame from the video and display it.
+        """
+        # If the video is not playing, exit the method early.
         if not self.playing:
             return
 
+        # Attempt to read the next frame from the video capture object.
         ret, frame = self.cap.read()
+
         if ret:
+            # If a frame was successfully read, convert it from BGR to RGB.
             frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+            
+            # Convert the frame to a PIL Image object.
             img = Image.fromarray(frame)
+            
+            # Convert the PIL Image to a format that can be displayed in Tkinter.
             imgtk = ImageTk.PhotoImage(image=img)
 
+            # Store the image reference in the label to prevent garbage collection.
             self.label.imgtk = imgtk
+            
+            # Update the label with the new image (video frame).
             self.label.configure(image=imgtk)
 
+            # Call this method again after 10 milliseconds to display the next frame.
             self.parent_frame.after(10, self.update_frame)
         else:
+            # If no more frames are available, reset the video to the beginning.
             self.cap.set(cv2.CAP_PROP_POS_FRAMES, 0)
-            self.playing = False  # Stop the video from looping
+            
+            # Stop the video from playing to prevent looping.
+            self.playing = False
 
     def stop(self):
+        """
+        Stop the video playback.
+        """
+        # Set the playing flag to False, which will prevent further frame updates.
         self.playing = False
 
 
@@ -216,18 +267,26 @@ def GUI(text_queue, hand_queue):
     textbox.pack(fill="both", expand=True)
     scrollbar.config(command=textbox.yview, bg="#474747")
     
-    # Define the UI frame
+    '''
+    UI_frame is a box element that populates the entire right side of the GUI screen
+    It holds both the real-time letter display and the config file GUI bindings
+    '''
     UI_frame = tk.Frame(window, bg='#474747')
     UI_frame.place(x=window_width/2, y=0, width=window_width // 2, height=window_height)
 
-    # Define the dimensions for Letter_update_frame
+    '''
+    each frame's dimensions and placement on the GUI application are standardized using frame_width and frame_height directly or as reference
+    '''
     frame_width = (window_width // 2) - (window_width // 30)
     frame_height = (window_height // 3) - (window_height // 30)
     
     # Calculate the x position to center Letter_update_frame in UI_frame
     x_position = ((window_width // 2) - frame_width) // 2
 
-    # Define the Letter_update_frame
+    '''
+    Letter_update_frame is the frame that is responsible for containing the real-time letter display
+    the current letter in play during the robot's session is directly displayed within the bounds of this frame
+    '''
     Letter_update_frame = tk.Frame(UI_frame, bg="#474747")
     Letter_update_frame.place(
         x=x_position,
@@ -236,14 +295,17 @@ def GUI(text_queue, hand_queue):
         height=frame_height
     )
 
-    # Add a border to visualize the frame
+    # Add white border to visualize Letter_update_frame
     Letter_update_frame.config(highlightbackground="white", highlightthickness=4)
 
+    #this is just text that displays in the corner of Letter_update_frame that specifies what the user is reading
     Letter_title = tk.Label(Letter_update_frame, bg ="#474747", fg = "#FFFFFF", text="Letter in current read:", font=('Bell Gothic Std Black', 18))
     Letter_title.place(x = 10, y = 10)
 
+    #this contains the central functionality of Letter_update_frame as it is here where the letter is displayed in real time
     Letter_show = tk.Text(Letter_update_frame, bg ="#474747", fg = "#FFFFFF", wrap="word", font=('Courier', 120))
     Letter_show.place(x = 250, y = 40, width=200, height=200)
+
     
     Speed_frame = tk.Frame(UI_frame, bg="#474747")
     Speed_frame.place(
