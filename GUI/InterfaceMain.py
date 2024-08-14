@@ -161,27 +161,57 @@ def set_config_variables(lettersPause, wordPause, exitWord, autoSave, autoLaunch
     write_to_file(autoSave, "autoSave", "bool")
     write_to_file(autoLaunch, "autoLaunch", "bool")
 
+'''
+GUI function is the function responsible for drawing and updating all of the visual elements on the screen
+'''
 def GUI(text_queue, hand_queue):
 
+    #this is where the application window is made
+    #window - the variable that refers to the application window itself
     window = tk.Tk()
+    #this sets the dimensions of the application window to the native resolution of whatever device it's on
     window.geometry('%dx%d+0+0' % (window.winfo_screenwidth(), window.winfo_screenheight()))
+    #this sets what text is displayed in the top left corner of the application window
     window.title("GUI")
 
-    # Define the exact dimensions and positions for frames
+    '''
+    the dimension of the window is stored in two variables
+    this is done so that other elements being drawn on the screen can base their dimension and placement dynamically off the size of the window
+    '''
     window_width = window.winfo_screenwidth()
     window_height = window.winfo_screenheight()
 
+    '''
+    A frame in tkinter is a box element used to organize other elements on the screen by acting as a the associated parent
+    here video_frame is the element responsible for containing the 3D animations of the hand signing within the area and placement specified by .place method
+    '''
     video_frame = tk.Frame(window)
     video_frame.place(x=0, y=0, width=window_width, height=window_height // 2)
 
+    #here text_frame is the element responsible for containing the real time display of wordBacklog within the area and placement specified by .place method
     text_frame = tk.Frame(window, bg='#474747')
     text_frame.place(x=0, y=window_height // 2, width=window_width // 2, height=window_height // 2)
 
+    '''
+    initializes the mp4 player functionality that runs each 3D animation
+    this is where the 3D animations for the hand are played out on the screen
+    first argument of constructor sets parent
+    second argument of constructor sets directory path to mp4 being played
+        NOTE: mp4s must be VERY short in length, any slower than current mp4s and it WILL NOT keep up with bionic hand
+    third argument of constructor is specifying the application window this functionality parented to
+    '''
     player = VideoPlayer(video_frame, r"/home/signscribe/Downloads/SignScribe-master/Hand_signs/open_palm.mp4", window)
 
+    '''
+    this is the scrollbar at the right-most side of the text_frame for when wordBacklog appends beyond the space of text_frame on screen
+    '''
     scrollbar = tk.Scrollbar(text_frame, bg="#474747")
     scrollbar.pack(side="right", fill="y")
 
+    '''
+    textbox is the functionality that displays the contents of wordBacklog real time
+    here it is being defined, parented under text_frame, and configured with the previously defined scrollbar
+    '''
     textbox = tk.Text(text_frame, bg="#474747", fg="#FFFFFF", wrap="word", yscrollcommand=scrollbar.set, font=('Bell Gothic Std Black', 18))
     textbox.pack(fill="both", expand=True)
     scrollbar.config(command=textbox.yview, bg="#474747")
