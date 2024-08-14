@@ -214,6 +214,7 @@ def set_config_variables(lettersPause, wordPause, exitWord, autoSave, autoLaunch
 
 '''
 GUI function is the function responsible for drawing and updating all of the visual elements on the screen
+It's parameters are the queues from SignScribeOfficial
 '''
 def GUI(text_queue, hand_queue):
 
@@ -308,6 +309,13 @@ def GUI(text_queue, hand_queue):
 
     '''
     Speed_frame the box element that contains the interface with the config file as a recap the variables in configuration are:
+    exitWord - is the user-defined speech that terminates the program
+    wordPause - user defined stint between each word processed
+    lettersPause - user defined stint between each letter 
+    autoSave - a True or False value that determines whether or not all text will be recorded to fullTranscript
+    filter1 - a user-defined list of words to be censors when captured by vosk
+    autoLaunch - a True or False value that determines whether or not the GUI will automatically launch
+    parserConfig - a function that read Config.txt in order to get uder-defined values as previously mentioned
     '''
     Speed_frame = tk.Frame(UI_frame, bg="#474747")
     Speed_frame.place(
@@ -316,13 +324,23 @@ def GUI(text_queue, hand_queue):
         width=frame_width,
         height=frame_height
     )
-    
+
+    '''
+    Drawing a white border around Speed_frame
+    '''
     Speed_frame.config(highlightbackground="white", highlightthickness=4)
 
+    '''
+    This is text display that specifies the function of the general area to the user
+    '''
     Speed_title = tk.Label(Speed_frame, bg ="#474747", fg = "#FFFFFF", text="Config Settings:", font=('Bell Gothic Std Black', 18))
     Speed_title.place(x = 10, y = 10)
 
-        # Letter Pause
+    '''
+    The next few blocks of code are drawing out the text entry interfaces per config variable
+    '''
+    
+    # Letter Pause
     letter_pause_label = tk.Label(Speed_frame, text="Letter Pause", bg ="#474747", fg = "#FFFFFF", font=('Bell Gothic Std Black', 11))
     letter_pause_label.place(x=frame_width/6, y=80)  # Place label above the entry
     letter_pause_control = tk.Entry(Speed_frame)
@@ -353,18 +371,42 @@ def GUI(text_queue, hand_queue):
     auto_launch_control.place(x=4 * (frame_width/6), y=150)
 
 
+    '''
+    this the button for sending the all the user entered text in the previously made text entry elements to the config.txt
+    once this bottun runs set_config_variables once pressed
+    '''
     Set_speed = tk.Button(Speed_frame, text="Set variables", command=lambda: set_config_variables(letter_pause_control, word_pause_control, exit_word_control, auto_save_control, auto_launch_control))
     Set_speed.place(x = frame_height, y = 250)
 
+    '''
+    This is the main functionality that real-time updates the graphics, the text, and letter
+    It uses recursion to acomplish this
+    '''
     def update_text():
+
+        '''
+        Queues are basically stacks made specfically for inter-thread communication in multi-threading
+        Here the text_queue (which would have captured the contents of wordBacklog) would be display to a newly resetted textbod
+        '''
         try:
+            '''
+            here text_queue is captured by new_text
+            then text_box is emptied and replaced with new_text
+            '''
             new_text = text_queue.get_nowait()
             textbox.delete(1.0, tk.END)
             textbox.insert(tk.END, new_text)
         except queue.Empty:
             pass
-        
+            
+        '''
+        Here the text_queue (which would have captured the contents of wordBacklog) would be display to a newly resetted textbod
+        '''
         try:
+            '''
+            here hand_queue is captured by hand_sign (hand_queue communicates the letter the robot is currently signing)
+            then hand_sign is 
+            '''
             hand_sign = hand_queue.get_nowait()
             update_hand(hand_sign)
         except queue.Empty:
