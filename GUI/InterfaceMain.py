@@ -206,11 +206,16 @@ def update_hand_letter(hand_queue):
             return r"/home/signscribe/Downloads/SignScribe-master/Hand_signs/open_palm.mp4"
             
 def set_config_variables(lettersPause, wordPause, exitWord, autoSave, autoLaunch):
-    write_to_file(lettersPause, "lettersPause", "float")
-    write_to_file(wordPause, "wordsPause", "float")
-    write_to_file(exitWord, "exitWord", "string")
-    write_to_file(autoSave, "autoSave", "bool")
-    write_to_file(autoLaunch, "autoLaunch", "bool")
+    if len(lettersPause.get()) != 0:
+        write_to_file(lettersPause, "lettersPause", "float")
+    if len(wordPause.get()) != 0:
+        write_to_file(wordPause, "wordsPause", "float")
+    if len(exitWord.get()) != 0:
+        write_to_file(exitWord, "exitWord", "string")
+    if len(autoSave.get()) != 0:
+        write_to_file(autoSave, "autoSave", "bool")
+    if len(autoLaunch.get()) != 0:
+        write_to_file(autoLaunch, "autoLaunch", "bool")
 
 '''
 GUI function is the function responsible for drawing and updating all of the visual elements on the screen
