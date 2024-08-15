@@ -333,7 +333,7 @@ def letterSwitch():
 						'''
 						controlServo is called and each motor is set to these specific position to emulate the equivalent motion/pose expected in ASL
       						'''
-						controlServo(serv1 = 100, serv2 = 160, serv3 = 160, serv4 = 160, serv5 = 160, serv6 = 90, serv7 = 90)
+						controlServo(serv1 = 100, serv2 = 160, serv3 = 160, serv4 = 160, serv5 = 160, serv6 = 90, serv7 = 135)
 
 						'''
 						GUI_hand_queue captures the current letter in process and sends it to the GUI thread for animating
@@ -351,7 +351,7 @@ def letterSwitch():
 						sleep(lettersPause)
 						
 					case 'c':
-						controlServo(serv1 = 80, serv2 = 120, serv3 = 120, serv4 = 120, serv5 = 120, serv6 = 180, serv7 = 90)
+						controlServo(serv1 = 80, serv2 = 90, serv3 = 90, serv4 = 90, serv5 = 90, serv6 = 180, serv7 = 90)
 						GUI_hand_queue.put('c')
 						sleep(lettersPause)
 						
@@ -417,7 +417,7 @@ def letterSwitch():
 						sleep(lettersPause)
 						
 					case 'o':
-						controlServo(serv1 = 30, serv2 = 140, serv3 = 140, serv4 = 140, serv5 = 140, serv6 = 180, serv7 = 90)
+						controlServo(serv1 = 20, serv2 = 160, serv3 = 160, serv4 = 160, serv5 = 160, serv6 = 180, serv7 = 90)
 						GUI_hand_queue.put('o')
 						sleep(lettersPause)
 						
@@ -437,7 +437,7 @@ def letterSwitch():
 						sleep(lettersPause)
 						
 					case 's':
-						controlServo(serv1 = 10, serv2 = 160, serv3 = 160, serv4 = 160, serv5 = 160, serv6 = 90, serv7 = 90)
+						controlServo(serv1 = 10, serv2 = 160, serv3 = 160, serv4 = 160, serv5 = 160, serv6 = 90, serv7 = 45)
 						GUI_hand_queue.put('s')
 						sleep(lettersPause)
 						
