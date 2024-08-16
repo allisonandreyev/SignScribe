@@ -61,7 +61,7 @@ def configParser():
     '''
     Returns all inputted values from config file.
     '''
-    return exitWord, wordsPause, lettersPause, autoSave, filter1, autoLaunch
+    return exitWord, wordsPause, lettersPause, autoSave, censorFilter, autoLaunch
 
 '''
 Runs configParser function.
