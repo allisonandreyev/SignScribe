@@ -38,11 +38,11 @@ exitWord - is the user-defined speech that terminates the program
 wordPause - user defined stint between each word processed
 lettersPause - user defined stint between each letter 
 autoSave - a True or False value that determines whether or not all text will be recorded to fullTranscript
-filter1 - a user-defined list of words to be censors when captured by vosk
+censorFilter - a user-defined list of words to be censors when captured by vosk
 autoLaunch - a True or False value that determines whether or not the GUI will automatically launch
 parserConfig - a function that read Config.txt in order to get uder-defined values as previously mentioned
 '''
-exitWord, wordsPause, lettersPause, autoSave, filter1, autoLaunch = parserConfig.configParser()
+exitWord, wordsPause, lettersPause, autoSave, censorFilter, autoLaunch = parserConfig.configParser()
 
 '''
 wordBacklog - a list that captures the text to be processed through vosk. As soon as a
@@ -251,7 +251,7 @@ def VoiceToText():
 			stores newly inputed text into wordBackLog and fullTranscript
    			'''
 			for i in newText:
-				if i not in filter1:
+				if i not in censorFilter:
 					wordBacklog.append(i)
 					fullTranscript.append(i)
 				else:
