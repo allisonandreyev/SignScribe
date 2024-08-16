@@ -313,7 +313,7 @@ def letterSwitch():
 		'''
 		checks if the exitWord has been spoken, if it has the hand will not sign it
   		'''
-		if not wordBacklog == [] and not set(stop).issubset(set(wordBacklog)) and wordBacklog[0] != "[censored]":
+		if not wordBacklog == [] and not set(stop).issubset(set(wordBacklog)) and wordBacklog[0] != "[censored]" and wordBacklog[0] != "huh":
 
 			'''
 			disect wordbacklog into letters & run appropriate function
