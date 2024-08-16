@@ -252,8 +252,9 @@ def VoiceToText():
    			'''
 			for i in newText:
 				if i not in censorFilter:
-					wordBacklog.append(i)
-					fullTranscript.append(i)
+					if i != "huh":
+						wordBacklog.append(i)
+						fullTranscript.append(i)
 				else:
 					wordBacklog.append("[censored]")
 					fullTranscript.append("[censored]")
