@@ -277,7 +277,7 @@ def GUI(text_queue, hand_queue):
     UI_frame is a box element that populates the entire right side of the GUI screen
     It holds both the real-time letter display and the config file GUI bindings
     '''
-    UI_frame = tk.Frame(window, bg='#474747')
+    UI_frame = tk.Frame(window, bg='#0A5C7F')
     UI_frame.place(x=window_width/2, y=0, width=window_width // 2, height=window_height)
 
     '''
