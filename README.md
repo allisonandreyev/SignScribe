@@ -4,7 +4,7 @@
 #### Creators: Allison Andreyev, Yenni Do, Sakib Niaz, Elliott Owens
 ---
 *Dependencies*
-* Uses LLM VOSK to translate speech into text format
+* Uses open source speech recognition kit VOSK to translate speech into text format
 * Raspberry Pi Model 4B controls 7 servos, 2 degree freedom wrist + 5 fingers
 * Python program (open source for other's implementation)
 * Bionic hand for sign movements
